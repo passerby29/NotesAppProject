@@ -1,0 +1,78 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.NotesApp" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/purple_200</item>
+        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/text_color_main2</item>
+        <item name="colorSecondaryVariant">@color/teal_200</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@color/statusBar</item>
+        <!-- Customize your theme here. -->
+        <item name="android:navigationBarColor">@color/statusBar</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
+    <style name="TextViewStyle">
+        <item name="android:textColor">@color/text_color_main</item>
+        <item name="fontFamily">@font/montserrat_alternates_regular</item>
+    </style>
+
+    <style name="SearchEditTextStyle" parent="Widget.Material3.AutoCompleteTextView.OutlinedBox.Dense">
+        <item name="fontFamily">@font/montserrat_alternates_light</item>
+        <item name="android:hint">@string/et_search_hint</item>
+        <item name="singleLine">true</item>
+        <item name="android:textAppearance">@style/TextAppearance.AppCompat.Small</item>
+        <item name="android:textColor">@color/text_color_main</item>
+        <item name="android:textColorHint">@color/text_color_main</item>
+        <item name="android:textCursorDrawable">@drawable/item_cursor_et</item>
+        <item name="android:inputType">text</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="IconButtonStyle">
+        <item name="android:minWidth">@dimen/m3_btn_icon_only_min_width</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:insetLeft">@dimen/m3_btn_inset</item>
+        <item name="android:insetRight">@dimen/m3_btn_inset</item>
+        <item name="iconSize">@dimen/m3_btn_icon_only_default_size</item>
+        <item name="iconTint">@color/m3_icon_button_icon_color_selector</item>
+        <item name="iconPadding">0dp</item>
+        <item name="materialThemeOverlay">@style/ThemeOverlay.Material3.Button.IconButton</item>
+    </style>
+
+    <style name="DisabledIconButtonStyle">
+        <item name="android:minWidth">@dimen/m3_btn_icon_only_min_width</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:insetLeft">@dimen/m3_btn_inset</item>
+        <item name="android:insetRight">@dimen/m3_btn_inset</item>
+        <item name="iconSize">@dimen/m3_btn_icon_only_default_size</item>
+        <item name="iconTint">@color/et_background</item>
+        <item name="tintMode">multiply</item>
+        <item name="tint">@color/et_background</item>
+        <item name="iconPadding">0dp</item>
+        <item name="materialThemeOverlay">@style/ThemeOverlay.Material3.Button.IconButton</item>
+    </style>
+
+    <style name="dividerStyle">
+        <item name="android:background">@color/divider</item>
+        <item name="android:layout_width">1dp</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="cornerRadius">16dp</item>
+    </style>
+
+    <style name="settingsButtonStyle">
+        <item name="drawableTint">@color/text_color_main</item>
+        <item name="fontFamily">@font/montserrat_alternates_regular</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:textAlignment">textStart</item>
+        <item name="cornerRadius">14dp</item>
+        <item name="rippleColor">@color/ripple_color</item>
+        <item name="android:textColor">@color/text_color_main</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+</resources>
