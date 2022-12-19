@@ -1,20 +1,17 @@
 package com.passerby.notesapp.data.room
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
-import com.passerby.notesapp.data.model.CategoryRVModel
+import androidx.lifecycle.LiveData
+import androidx.room.*
 
 @Dao
 interface CategoriesDao {
 
-    @Query("select * from Categories")
-    fun getAllCategories(): List<CategoryRVModel>
+    @Query("select * from Categories order by id ASC")
+    fun getAllCategories(): LiveData<List<CategoriesEntity>>
 
-    @Insert
-    fun addCategory(item: CategoryRVModel)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun addCategory(item: CategoriesEntity)
 
     @Delete
-    fun remove(item: CategoryRVModel)
+    suspend fun removeCategory(item: CategoriesEntity)
 }

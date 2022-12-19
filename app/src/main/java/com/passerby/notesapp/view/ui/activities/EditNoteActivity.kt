@@ -7,12 +7,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.snackbar.Snackbar
 import com.passerby.notesapp.data.repositories.NotesRepository
 import com.passerby.notesapp.data.room.NotesAppDB
 import com.passerby.notesapp.data.room.NotesEntity
 import com.passerby.notesapp.databinding.ActivityEditNoteBinding
-import com.passerby.notesapp.view.ui.viewmodels.NotesViewModel
+import com.passerby.notesapp.view.ui.viewmodels.MainViewModel
 import kotlinx.android.synthetic.main.activity_edit_note.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -20,7 +19,7 @@ import java.util.*
 class EditNoteActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEditNoteBinding
-    private lateinit var viewModel: NotesViewModel
+    private lateinit var viewModel: MainViewModel
     private var noteId = -1
 
     @SuppressLint("SimpleDateFormat")
@@ -33,7 +32,7 @@ class EditNoteActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(
             this, ViewModelProvider.AndroidViewModelFactory.getInstance(application)
-        )[NotesViewModel::class.java]
+        )[MainViewModel::class.java]
 
         val noteType = intent.getStringExtra("noteType")
         if (noteType.equals("Edit")) {
@@ -61,6 +60,10 @@ class EditNoteActivity : AppCompatActivity() {
                     }
                 }
             }
+        } else {
+            val sdf = SimpleDateFormat("dd MMM, yyyy - HH:mm")
+            val currentDateAndTime: String = sdf.format(Date())
+            binding.newNoteDateTv.text = currentDateAndTime
         }
 
         new_note_conf_btn.setOnClickListener {
@@ -90,12 +93,13 @@ class EditNoteActivity : AppCompatActivity() {
                         )
                     updatedNote.id = noteId
                     viewModel.updateNote(updatedNote)
-                    Snackbar.make(it, "Note updated", Snackbar.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Note updated", Toast.LENGTH_SHORT).show()
                 }
             } else {
                 if (noteTitle.isNotEmpty() && noteContent.isNotEmpty()) {
                     val sdf = SimpleDateFormat("dd MMM, yyyy - HH:mm")
                     val currentDateAndTime: String = sdf.format(Date())
+                    binding.newNoteDateTv.text = currentDateAndTime
                     viewModel.newNote(
                         NotesEntity(
                             noteTitle,
@@ -105,11 +109,10 @@ class EditNoteActivity : AppCompatActivity() {
                             noteBookmark
                         )
                     )
-                    Snackbar.make(it, "Note updated", Snackbar.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Note added", Toast.LENGTH_SHORT).show()
                 }
             }
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
+            onBackPressedDispatcher.onBackPressed()
         }
     }
 }

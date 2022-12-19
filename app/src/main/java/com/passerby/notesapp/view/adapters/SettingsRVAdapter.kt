@@ -1,20 +1,28 @@
 package com.passerby.notesapp.view.adapters
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import com.passerby.notesapp.R
-import com.passerby.notesapp.data.model.CategoryRVModel
+import com.passerby.notesapp.data.room.CategoriesEntity
 
-class SettingsRVAdapter(private val categoriesList: ArrayList<CategoryRVModel>) :
-    RecyclerView.Adapter<SettingsRVAdapter.SettingsViewHolder>() {
-    lateinit var clickListener: CategoryItemClickListener
+class SettingsRVAdapter(
+    val context: Context,
+    private val categoryDeleteClickListener: CategoryDeleteClickListener,
+) : RecyclerView.Adapter<SettingsRVAdapter.SettingsViewHolder>() {
 
-    interface CategoryItemClickListener {
-        fun deleteCategory(position: Int)
+    private val allCategories = ArrayList<CategoriesEntity>()
+
+    interface CategoryItemClickListener {}
+
+    interface CategoryDeleteClickListener {
+        fun onDeleteClickListener(item: CategoriesEntity)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SettingsViewHolder {
@@ -25,11 +33,21 @@ class SettingsRVAdapter(private val categoriesList: ArrayList<CategoryRVModel>) 
     }
 
     override fun onBindViewHolder(holder: SettingsViewHolder, position: Int) {
-        holder.categoryName.text = categoriesList[position].name
-        holder.categoryBtn.setOnClickListener { clickListener.deleteCategory(position) }
+        holder.categoryName.text = allCategories[position].name
+        holder.categoryBtn.setOnClickListener {
+            categoryDeleteClickListener.onDeleteClickListener(
+                allCategories[position]
+            )
+        }
     }
 
-    override fun getItemCount() = categoriesList.size
+    fun updateList(newList: List<CategoriesEntity>) {
+        allCategories.clear()
+        allCategories.addAll(newList)
+        notifyDataSetChanged()
+    }
+
+    override fun getItemCount() = allCategories.size
 
     class SettingsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val categoryName: TextView = itemView.findViewById(R.id.category_name_tv)

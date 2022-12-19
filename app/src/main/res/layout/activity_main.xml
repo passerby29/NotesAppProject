@@ -56,60 +56,61 @@
             app:layout_constraintTop_toBottomOf="@+id/main_notes_tv"
             tools:ignore="LabelFor,TouchTargetSizeCheck" />
 
-        <HorizontalScrollView
-            android:id="@+id/horizontalScrollView"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scroll"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
+            android:fillViewport="true"
             android:layout_marginTop="8dp"
-            android:overScrollMode="never"
-            android:scrollbars="none"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/main_search_et">
+            app:layout_constraintTop_toBottomOf="@id/main_search_et">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-                <com.google.android.material.chip.ChipGroup
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingStart="16dp"
-                    app:checkedChip="@id/chip_1"
-                    app:chipSpacing="8dp"
-                    app:selectionRequired="true"
-                    app:singleLine="true"
-                    app:singleSelection="true">
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/main_categories_rv"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:nestedScrollingEnabled="false"
+                    android:paddingStart="8dp"
+                    android:overScrollMode="never"
+                    app:layout_constraintEnd_toStartOf="@+id/main_chip_divider"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                    <com.google.android.material.chip.Chip
-                        android:id="@+id/chip_1"
-                        style="@style/Widget.Material3.Chip.Suggestion"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="All notes"
-                        android:textColor="@color/black"
-                        app:chipBackgroundColor="@color/item_chip_background"
-                        app:chipCornerRadius="12dp"
-                        app:chipStrokeWidth="0dp"
-                        tools:ignore="TouchTargetSizeCheck" />
-                </com.google.android.material.chip.ChipGroup>
+                <LinearLayout
+                    android:id="@+id/main_chip_divider"
+                    android:layout_width="1dp"
+                    android:layout_height="0dp"
+                    style="@style/dividerStyle"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/main_add_category_btn"
+                    app:layout_constraintStart_toEndOf="@+id/main_categories_rv"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.appcompat.widget.AppCompatImageButton
-                    android:id="@+id/settings_back_btn"
+                    android:id="@+id/main_add_category_btn"
                     style="@style/IconButtonStyle"
-                    android:layout_width="36dp"
-                    android:layout_height="36dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="8dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_weight="1"
                     android:layout_marginEnd="16dp"
                     android:background="@drawable/item_btns_style_5"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/ic_plus"
                     tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
-            </LinearLayout>
-        </HorizontalScrollView>
 
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.core.widget.NestedScrollView>
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -122,7 +123,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView">
+            app:layout_constraintTop_toBottomOf="@+id/scroll">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/main_notes_rv"

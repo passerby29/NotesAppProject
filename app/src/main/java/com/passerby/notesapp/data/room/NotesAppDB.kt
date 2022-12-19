@@ -6,15 +6,15 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [NotesEntity::class],
+    entities = [NotesEntity::class, CategoriesEntity::class],
     exportSchema = false,
-    version = 1
+    version = 2
 )
 abstract class NotesAppDB : RoomDatabase() {
 
     abstract fun getNotesDao(): NotesDao
 
-    //abstract fun getCategoriesDao(): CategoriesDao
+    abstract fun getCategoriesDao(): CategoriesDao
 
     companion object {
         @Volatile
@@ -25,7 +25,7 @@ abstract class NotesAppDB : RoomDatabase() {
                     context.applicationContext,
                     NotesAppDB::class.java,
                     "notes_database"
-                ).allowMainThreadQueries().build()
+                ).fallbackToDestructiveMigration().allowMainThreadQueries().build()
                 INSTANCE = instance
                 instance
             }

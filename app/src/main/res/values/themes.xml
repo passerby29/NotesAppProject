@@ -2,12 +2,12 @@
     <!-- Base application theme. -->
     <style name="Theme.NotesApp" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
+        <item name="colorPrimary">@color/text_color_main2</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/text_color_main2</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorSecondaryVariant">@color/teal_200</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/statusBar</item>
@@ -15,6 +15,27 @@
         <item name="android:navigationBarColor">@color/statusBar</item>
         <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">true</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.App.MaterialAlertDialog</item>
+    </style>
+
+    <style name="ChipStyle" parent="Widget.Material3.Chip.Suggestion">
+        <item name="android:textColor">@color/black</item>
+        <item name="chipStrokeWidth">0dp</item>
+        <item name="chipBackgroundColor">@color/item_chip_background</item>
+    </style>
+
+    <style name="ThemeOverlay.App.MaterialAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="colorPrimary">@color/statusBar</item>
+        <item name="colorSecondary">@color/statusBar</item>
+        <item name="colorSurface">@color/main_background</item>
+        <item name="colorOnSurface">@color/text_color_main2</item>
+        <item name="colorOnSurfaceVariant">@color/text_color_main2</item>
+        <item name="buttonBarPositiveButtonStyle">@style/AlertDialogButtonStyle</item>
+        <item name="buttonBarNegativeButtonStyle">@style/AlertDialogButtonStyle</item>
+    </style>
+
+    <style name="AlertDialogButtonStyle" parent="Widget.Material3.Button.TextButton.Dialog">
+        <item name="android:textColor">@color/text_color_main2</item>
     </style>
 
     <style name="SearchEditTextStyle" parent="Widget.Material3.AutoCompleteTextView.OutlinedBox.Dense">
@@ -80,5 +101,22 @@
         <item name="rippleColor">@color/ripple_color</item>
         <item name="android:textColor">@color/text_color_main</item>
         <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="DialogAlert">
+        <item name="materialAlertDialogTitlePanelStyle">
+            @style/MaterialAlertDialog.Material3.Title.Panel.CenterStacked
+        </item>
+        <item name="materialAlertDialogTitleIconStyle">
+            @style/MaterialAlertDialog.Material3.Title.Icon.CenterStacked
+        </item>
+        <item name="materialAlertDialogTitleTextStyle">
+            @style/MaterialAlertDialog.Material3.Title.Text.CenterStacked
+        </item>
+        <item name="colorPrimary">@color/text_color_main2</item>
+        <item name="tint">@color/text_color_main2</item>
+        <item name="colorSurface">@color/statusBar</item>
+        <item name="colorOnSurface">@color/text_color_main2</item>
+        <item name="colorOnSurfaceVariant">@color/text_color_main2</item>
     </style>
 </resources>

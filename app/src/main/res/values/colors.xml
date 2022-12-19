@@ -16,6 +16,7 @@
     <color name="text_color_add">#969696</color>
     <color name="et_background">#4DD6CCC2</color>
     <color name="divider">#E5E0DB</color>
+    <color name="divider2">#393939</color>
     <color name="delete_color">#6D3B3B</color>
     <color name="ripple_color">#BEAD9D</color>
     <color name="chip_background2">#E2E2E2</color>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ripple xmlns:android="http://schemas.android.com/apk/res/android"
-    android:color="@color/statusBar">
+    android:color="@color/ripple_color">
     <item>
         <shape>
             <corners android:radius="12dp" />
-            <solid android:color="@color/chip_background2" />
+            <solid android:color="@color/statusBar" />
         </shape>
     </item>
 </ripple>

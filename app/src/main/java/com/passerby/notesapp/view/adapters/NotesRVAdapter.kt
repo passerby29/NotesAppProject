@@ -12,10 +12,12 @@ import com.passerby.notesapp.data.room.NotesEntity
 
 class NotesRVAdapter(
     val context: Context,
-    private val noteClickListener: NoteClickListener
+    private val noteClickListener: NoteClickListener,
 ) : RecyclerView.Adapter<NotesRVAdapter.NotesViewHolder>() {
 
     private val notesList = ArrayList<NotesEntity>()
+    var isSelected: Boolean = false
+    val itemSelectedList = mutableListOf<Int>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesViewHolder {
         val itemView =
@@ -34,7 +36,24 @@ class NotesRVAdapter(
         } else {
             View.GONE
         }
-        holder.itemView.setOnClickListener { noteClickListener.onNoteClick(notesList[position]) }
+        holder.notesCheckboxIV.visibility = if (isSelected) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
+        holder.itemView.setOnClickListener {
+            if (isSelected) {
+                if (itemSelectedList.contains(notesList[position].id)) {
+                    itemSelectedList.removeAt(position)
+                    holder.notesCheckboxIV.setBackgroundResource(R.drawable.ic_checkbox)
+                } else {
+                    itemSelectedList.add(notesList[position].id)
+                    holder.notesCheckboxIV.setBackgroundResource(R.drawable.ic_checkbox_checked)
+                }
+            } else {
+                noteClickListener.onNoteClick(notesList[position])
+            }
+        }
     }
 
     override fun getItemCount(): Int {
@@ -47,12 +66,17 @@ class NotesRVAdapter(
         notifyDataSetChanged()
     }
 
+    fun deleteClick(isSelected: Boolean) {
+        this.isSelected = isSelected
+    }
+
     class NotesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val notesNameTV: TextView = itemView.findViewById(R.id.notes_name_tv)
         val notesContentTV: TextView = itemView.findViewById(R.id.notes_content_tv)
         val notesDateTV: TextView = itemView.findViewById(R.id.notes_date_tv)
         val notesCategoryTV: TextView = itemView.findViewById(R.id.notes_category_tv)
         val notesBookmarkIV: ImageView = itemView.findViewById(R.id.notes_bookmark_iv)
+        val notesCheckboxIV: ImageView = itemView.findViewById(R.id.notes_checkbox_iv)
     }
 
     interface NoteClickListener {
