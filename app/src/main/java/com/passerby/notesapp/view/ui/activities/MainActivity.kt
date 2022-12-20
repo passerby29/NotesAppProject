@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,6 +12,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputLayout
 import com.passerby.notesapp.R
 import com.passerby.notesapp.data.room.CategoriesEntity
+import com.passerby.notesapp.data.room.NotesAppDB
 import com.passerby.notesapp.data.room.NotesEntity
 import com.passerby.notesapp.databinding.ActivityMainBinding
 import com.passerby.notesapp.view.adapters.CategoriesChipRVAdapter
@@ -25,6 +27,7 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener {
     private lateinit var viewModel: MainViewModel
     private lateinit var materialAlertDialogBuilder: MaterialAlertDialogBuilder
     private lateinit var customAlertDialogView: View
+    private var countNotes: Int = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,6 +82,7 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener {
                                     viewModel.deleteNote(item[i])
                                 }
                                 item.clear()
+                                notesRVAdapter.deleteClick(!notesRVAdapter.isSelected)
                             }
                             .setNegativeButton("Cancel") { _, _ ->
                             }
@@ -121,8 +125,10 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener {
         }
         //Categories add recyclerView code
 
-        binding.mainNotesTv.text =
-            StringBuilder().append(viewModel.count).append(" notes").toString()
+        viewModel.count.observe(this){
+            binding.mainNotesTv.text =
+                StringBuilder().append(it.toString()).append(" notes").toString()
+        }
     }
 
 

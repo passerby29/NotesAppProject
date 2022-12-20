@@ -3,6 +3,7 @@ package com.passerby.notesapp.view.ui.viewmodels
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.passerby.notesapp.data.repositories.CategoriesRepository
 import com.passerby.notesapp.data.repositories.NotesRepository
@@ -18,6 +19,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val notesList: LiveData<List<NotesEntity>>
     private val notesRepository: NotesRepository
     private val notesDao = NotesAppDB.getDatabase(application).getNotesDao()
+    val count : LiveData<Int>
 
     //
     val categoriesList: LiveData<List<CategoriesEntity>>
@@ -30,6 +32,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     init {
         notesRepository = NotesRepository(notesDao)
         notesList = notesRepository.notesList
+        count = notesRepository.count
         //
         categoriesRepository = CategoriesRepository(categoriesDao)
         categoriesList = categoriesRepository.categoriesList
@@ -52,6 +55,4 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun addCategory(category: CategoriesEntity) = viewModelScope.launch(Dispatchers.IO) {
         categoriesRepository.addCategory(category)
     }
-
-    val count = notesRepository.getCount()
 }
