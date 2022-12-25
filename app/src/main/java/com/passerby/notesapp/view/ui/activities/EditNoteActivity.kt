@@ -7,11 +7,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.luckyhan.studio.mokaeditor.MokaSpanTool
 import com.passerby.notesapp.data.repositories.NotesRepository
 import com.passerby.notesapp.data.room.NotesAppDB
 import com.passerby.notesapp.data.room.NotesEntity
 import com.passerby.notesapp.databinding.ActivityEditNoteBinding
-import com.passerby.notesapp.view.ui.viewmodels.MainViewModel
+import com.passerby.notesapp.view.ui.viewmodels.EditNoteViewModel
 import kotlinx.android.synthetic.main.activity_edit_note.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -19,8 +21,12 @@ import java.util.*
 class EditNoteActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEditNoteBinding
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: EditNoteViewModel
     private var noteId = -1
+    private var index = 0
+    private lateinit var category: String
+    private lateinit var categories: Array<String?>
+    private lateinit var spanTool: MokaSpanTool
 
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,11 +34,46 @@ class EditNoteActivity : AppCompatActivity() {
         binding = ActivityEditNoteBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        spanTool = MokaSpanTool(binding.newNoteContentEt)
+        binding.newNoteContentEt.textChangeListener = spanTool
+
+        binding.newNoteUndoBtn.setOnClickListener { spanTool.undo() }
+        binding.newNoteRedoBtn.setOnClickListener { spanTool.redo() }
+
+        binding.newNoteBackBtn.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
+
         NotesRepository(NotesAppDB.getDatabase(application).getNotesDao()).notesList
 
         viewModel = ViewModelProvider(
             this, ViewModelProvider.AndroidViewModelFactory.getInstance(application)
-        )[MainViewModel::class.java]
+        )[EditNoteViewModel::class.java]
+
+        viewModel.categoriesList.observe(this) { list ->
+            list?.let {
+                categories = arrayOfNulls(list.size + 1)
+                for (i in 1..list.size) {
+                    categories[0] = "No category"
+                    categories[i] = it[i - 1].name
+                }
+            }
+        }
+
+        binding.newNoteCategoryBtn.setOnClickListener {
+            MaterialAlertDialogBuilder(this)
+                .setTitle("Select Category")
+                .setSingleChoiceItems(categories, index) { _, which ->
+                    index = which
+                    category = categories[which].toString()
+                }
+                .setPositiveButton("Ok") { _, _ ->
+                    binding.newNoteCategoryBtn.text = category
+                }
+                .setNegativeButton("Cancel") { _, _ -> }
+                .show()
+        }
 
         val noteType = intent.getStringExtra("noteType")
         if (noteType.equals("Edit")) {
@@ -42,7 +83,6 @@ class EditNoteActivity : AppCompatActivity() {
             val noteCategory = intent.getStringExtra("noteCategory")
             var noteBookmark = intent.getBooleanExtra("noteBookmark", false)
             noteId = intent.getIntExtra("noteId", -1)
-
             binding.newNoteNameEt.setText(noteTitle.toString())
             binding.newNoteContentEt.setText(noteContent.toString())
             binding.newNoteDateTv.text = noteDate.toString()
@@ -68,7 +108,7 @@ class EditNoteActivity : AppCompatActivity() {
 
         new_note_conf_btn.setOnClickListener {
             val noteTitle = binding.newNoteNameEt.text.trim().toString()
-            val noteContent = binding.newNoteContentEt.text.trim().toString()
+            val noteContent = binding.newNoteContentEt.text?.trim().toString()
             val noteCategory = binding.newNoteCategoryBtn.text.trim().toString()
             val noteBookmark = when (binding.newNoteBookmarkBtn.isChecked) {
                 true -> {
@@ -83,17 +123,11 @@ class EditNoteActivity : AppCompatActivity() {
                 if (noteTitle.isNotEmpty() && noteContent.isNotEmpty()) {
                     val sdf = SimpleDateFormat("dd MMM, yyyy - HH:mm")
                     val currentDateAndTime: String = sdf.format(Date())
-                    val updatedNote =
-                        NotesEntity(
-                            noteTitle,
-                            noteContent,
-                            currentDateAndTime,
-                            noteCategory,
-                            noteBookmark
-                        )
+                    val updatedNote = NotesEntity(
+                        noteTitle, noteContent, currentDateAndTime, noteCategory, noteBookmark
+                    )
                     updatedNote.id = noteId
                     viewModel.updateNote(updatedNote)
-                    Toast.makeText(this, "Note updated", Toast.LENGTH_SHORT).show()
                 }
             } else {
                 if (noteTitle.isNotEmpty() && noteContent.isNotEmpty()) {
@@ -102,11 +136,7 @@ class EditNoteActivity : AppCompatActivity() {
                     binding.newNoteDateTv.text = currentDateAndTime
                     viewModel.newNote(
                         NotesEntity(
-                            noteTitle,
-                            noteContent,
-                            currentDateAndTime,
-                            noteCategory,
-                            noteBookmark
+                            noteTitle, noteContent, currentDateAndTime, noteCategory, noteBookmark
                         )
                     )
                     Toast.makeText(this, "Note added", Toast.LENGTH_SHORT).show()

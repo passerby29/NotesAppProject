@@ -21,4 +21,5 @@
     <color name="ripple_color">#BEAD9D</color>
     <color name="chip_background2">#E2E2E2</color>
     <color name="chip_background">#B6A291</color>
+    <color name="disabled_icon_color">#afafaf</color>
 </resources>

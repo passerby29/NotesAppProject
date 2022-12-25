@@ -112,6 +112,7 @@
         android:textAlignment="textStart"
         android:textColor="@color/text_color_add"
         android:textSize="10sp"
+        android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="@+id/new_note_date_tv"
         app:layout_constraintStart_toEndOf="@+id/new_note_date_tv"
         app:layout_constraintTop_toBottomOf="@+id/new_note_name_et"
@@ -135,7 +136,7 @@
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
         tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
-    <EditText
+    <com.luckyhan.studio.mokaeditor.MokaEditText
         android:id="@+id/new_note_content_et"
         android:layout_width="match_parent"
         android:layout_height="0dp"

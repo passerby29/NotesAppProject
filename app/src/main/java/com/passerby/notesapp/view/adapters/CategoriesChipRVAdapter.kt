@@ -11,11 +11,13 @@ import com.passerby.notesapp.R
 import com.passerby.notesapp.data.room.CategoriesEntity
 
 class CategoriesChipRVAdapter(
-    val context: Context
+    val context: Context,
+    private val categoryClickListener: CategoryClickListener
 ) : RecyclerView.Adapter<CategoriesChipRVAdapter.ViewHolder>() {
 
     private var selectedItemPosition: Int = 0
     val categoriesList = ArrayList<CategoriesEntity>()
+    var category: String = ""
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -24,9 +26,13 @@ class CategoriesChipRVAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.chipForeground.text = categoriesList[position].name
+        category = categoriesList[position].name
+        holder.chipForeground.text = category
         holder.chipForeground.setOnClickListener {
+            category = categoriesList[position].name
             selectedItemPosition = holder.adapterPosition
+            //showQueryNotesList(category)
+            categoryClickListener.categoryClickListener(category)
             notifyDataSetChanged()
         }
         if (selectedItemPosition == holder.adapterPosition)
@@ -39,6 +45,7 @@ class CategoriesChipRVAdapter(
 
     fun updateList(newList: List<CategoriesEntity>) {
         categoriesList.clear()
+        categoriesList.add(0, CategoriesEntity("All notes"))
         categoriesList.addAll(newList)
         notifyDataSetChanged()
     }
@@ -46,5 +53,9 @@ class CategoriesChipRVAdapter(
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val chipForeground: MaterialButton = itemView.findViewById(R.id.chip_foreground)
         val chipBackground: LinearLayout = itemView.findViewById(R.id.chip_background)
+    }
+
+    interface CategoryClickListener {
+        fun categoryClickListener(category: String)
     }
 }

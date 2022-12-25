@@ -26,7 +26,7 @@
 
     <style name="ThemeOverlay.App.MaterialAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="colorPrimary">@color/statusBar</item>
-        <item name="colorSecondary">@color/statusBar</item>
+        <item name="colorSecondary">@color/text_color_main2</item>
         <item name="colorSurface">@color/main_background</item>
         <item name="colorOnSurface">@color/text_color_main2</item>
         <item name="colorOnSurfaceVariant">@color/text_color_main2</item>
@@ -78,9 +78,6 @@
         <item name="android:insetLeft">@dimen/m3_btn_inset</item>
         <item name="android:insetRight">@dimen/m3_btn_inset</item>
         <item name="iconSize">@dimen/m3_btn_icon_only_default_size</item>
-        <item name="iconTint">@color/et_background</item>
-        <item name="tintMode">multiply</item>
-        <item name="tint">@color/et_background</item>
         <item name="iconPadding">0dp</item>
         <item name="materialThemeOverlay">@style/ThemeOverlay.Material3.Button.IconButton</item>
     </style>

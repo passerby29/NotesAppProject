@@ -12,43 +12,29 @@ import com.passerby.notesapp.data.room.NotesEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+class EditNoteViewModel(application: Application): AndroidViewModel(application) {
 
-class MainViewModel(application: Application) : AndroidViewModel(application) {
-
-    var notesList: LiveData<List<NotesEntity>>
+    private val notesList: LiveData<List<NotesEntity>>
     private val notesRepository: NotesRepository
     private val notesDao = NotesAppDB.getDatabase(application).getNotesDao()
-    val count: LiveData<Int>
 
     //
     val categoriesList: LiveData<List<CategoriesEntity>>
     private val categoriesRepository: CategoriesRepository
     private val categoriesDao = NotesAppDB.getDatabase(application).getCategoriesDao()
 
-    //Bookmarks
-    val bookmarkedList: LiveData<List<NotesEntity>>
-
     init {
         notesRepository = NotesRepository(notesDao)
         notesList = notesRepository.notesList
-        count = notesRepository.count
         //
         categoriesRepository = CategoriesRepository(categoriesDao)
         categoriesList = categoriesRepository.categoriesList
-        //
-        bookmarkedList = notesRepository.bookmarkedList
-        //
+    }
+    fun updateNote(note: NotesEntity) = viewModelScope.launch(Dispatchers.IO) {
+        notesRepository.updateNote(note)
     }
 
-    fun deleteNote(id: Int) = viewModelScope.launch(Dispatchers.IO) {
-        notesRepository.deleteNote(id)
-    }
-
-    fun addCategory(category: CategoriesEntity) = viewModelScope.launch(Dispatchers.IO) {
-        categoriesRepository.addCategory(category)
-    }
-
-    fun getQueryNotes(category: String): LiveData<List<NotesEntity>> {
-        return notesRepository.getQueryNotes(category)
+    fun newNote(note: NotesEntity) = viewModelScope.launch(Dispatchers.IO) {
+        notesRepository.newNote(note)
     }
 }

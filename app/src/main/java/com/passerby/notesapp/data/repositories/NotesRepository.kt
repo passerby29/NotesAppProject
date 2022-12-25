@@ -1,13 +1,12 @@
 package com.passerby.notesapp.data.repositories
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.passerby.notesapp.data.room.NotesDao
 import com.passerby.notesapp.data.room.NotesEntity
 
 class NotesRepository(private val notesDao: NotesDao) {
 
-    val notesList: LiveData<List<NotesEntity>> = notesDao.getAllNotes()
+    var notesList: LiveData<List<NotesEntity>> = notesDao.getAllNotes()
 
     val bookmarkedList: LiveData<List<NotesEntity>> = notesDao.getBookmarks()
 
@@ -23,5 +22,9 @@ class NotesRepository(private val notesDao: NotesDao) {
 
     suspend fun updateNote(note: NotesEntity) {
         notesDao.updateNote(note)
+    }
+
+    fun getQueryNotes(category: String): LiveData<List<NotesEntity>> {
+        return notesDao.getQueryNotes(category)
     }
 }
