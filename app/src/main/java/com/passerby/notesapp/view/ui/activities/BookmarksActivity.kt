@@ -22,6 +22,11 @@ class BookmarksActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener 
         binding = ActivityBookmarksBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.bookmarksBackBtn.setOnClickListener {
+            val intent = Intent(this@BookmarksActivity, MainActivity::class.java)
+            startActivity(intent)
+        }
+
         binding.bookmarksSearchBtn.setOnClickListener {
             if (binding.bookmarksSearchEt.visibility == View.GONE) {
                 startSearch()

@@ -139,10 +139,10 @@ class EditNoteActivity : AppCompatActivity() {
                             noteTitle, noteContent, currentDateAndTime, noteCategory, noteBookmark
                         )
                     )
-                    Toast.makeText(this, "Note added", Toast.LENGTH_SHORT).show()
                 }
             }
-            onBackPressedDispatcher.onBackPressed()
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
     }
 }

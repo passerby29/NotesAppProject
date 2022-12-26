@@ -1,5 +1,6 @@
 package com.passerby.notesapp.view.ui.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -28,6 +29,11 @@ class SettingsActivity : AppCompatActivity(), SettingsRVAdapter.CategoryDeleteCl
         setContentView(binding.root)
 
         materialAlertDialogBuilder = MaterialAlertDialogBuilder(this)
+
+        binding.settingsBackBtn.setOnClickListener {
+            val intent = Intent(this@SettingsActivity, MainActivity::class.java)
+            startActivity(intent)
+        }
 
         binding.settingsAddCategoryBtn.setOnClickListener {
             customAlertDialogView =

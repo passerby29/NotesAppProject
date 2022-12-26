@@ -90,14 +90,18 @@
     </style>
 
     <style name="settingsButtonStyle">
-        <item name="drawableTint">@color/text_color_main</item>
+        <item name="android:drawablePadding">8dp</item>
         <item name="fontFamily">@font/montserrat_alternates_regular</item>
         <item name="android:padding">8dp</item>
         <item name="android:textAlignment">textStart</item>
-        <item name="cornerRadius">14dp</item>
-        <item name="rippleColor">@color/ripple_color</item>
-        <item name="android:textColor">@color/text_color_main</item>
+        <item name="android:textColor">@color/text_color_main2</item>
         <item name="android:textSize">12sp</item>
+        <item name="drawableTint">@color/text_color_main2</item>
+        <item name="elevation">2dp</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:layout_marginEnd">8dp</item>
+        <item name="android:layout_width">0dp</item>
     </style>
 
     <style name="DialogAlert">
