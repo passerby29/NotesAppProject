@@ -57,28 +57,16 @@
 
     <EditText
         android:id="@+id/bookmarks_search_et"
-        style="@style/Widget.Material3.AutoCompleteTextView.OutlinedBox.Dense"
+        style="@style/SearchEditTextStyle"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
+        android:layout_height="50dp"
         android:autofillHints="Search"
         android:background="@drawable/item_edittext_style"
-        android:fontFamily="@font/montserrat_alternates_light"
-        android:hint="@string/et_search_hint"
-        android:inputType="text"
-        android:singleLine="true"
-        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        android:textColor="@color/text_color_main"
-        android:textColorHint="@color/text_color_main"
-        android:textCursorDrawable="@drawable/item_cursor_et"
-        android:textSize="14sp"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/bookmarks_header"
-        tools:ignore="TouchTargetSizeCheck" />
+        tools:ignore="LabelFor,TouchTargetSizeCheck" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"

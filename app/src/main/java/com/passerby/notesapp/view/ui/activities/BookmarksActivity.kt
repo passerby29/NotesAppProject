@@ -2,6 +2,8 @@ package com.passerby.notesapp.view.ui.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -49,16 +51,30 @@ class BookmarksActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener 
         }
 
         binding.bookmarksNotesRv.adapter = notesRVAdapter
+
+        binding.bookmarksSearchEt.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                viewModel.getFilterNotes(
+                    StringBuilder().append("%").append(p0).append("%").toString()
+                ).observe(this@BookmarksActivity) { list ->
+                    list?.let { notesRVAdapter.updateList(it) }
+                }
+            }
+
+            override fun afterTextChanged(p0: Editable?) {}
+        })
     }
 
     private fun startSearch() {
         binding.bookmarksSearchEt.visibility = View.VISIBLE
-        binding.bookmarksSearchBtn.setImageResource(R.drawable.ic_close)
+        binding.bookmarksSearchBtn.setImageResource(R.drawable.ic_close2)
     }
 
     private fun closeSearch() {
         binding.bookmarksSearchEt.visibility = View.GONE
-        binding.bookmarksSearchBtn.setImageResource(R.drawable.ic_search)
+        binding.bookmarksSearchBtn.setImageResource(R.drawable.ic_search2)
     }
 
     override fun onNoteClick(notes: NotesEntity) {

@@ -27,4 +27,12 @@ class NotesRepository(private val notesDao: NotesDao) {
     fun getQueryNotes(category: String): LiveData<List<NotesEntity>> {
         return notesDao.getQueryNotes(category)
     }
+
+    fun getFilterNotes(filter: String): LiveData<List<NotesEntity>> {
+        return notesDao.getFilterNotes(filter)
+    }
+
+    fun getFilterQueryNotes(filter: String, category: String): LiveData<List<NotesEntity>> {
+        return notesDao.getFilterQueryNotes(filter, category)
+    }
 }

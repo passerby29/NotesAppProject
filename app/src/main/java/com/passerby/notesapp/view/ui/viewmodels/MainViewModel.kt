@@ -51,4 +51,12 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     fun getQueryNotes(category: String): LiveData<List<NotesEntity>> {
         return notesRepository.getQueryNotes(category)
     }
+
+    fun getFilterNotes(filter: String): LiveData<List<NotesEntity>> {
+        return notesRepository.getFilterNotes(filter)
+    }
+
+    fun getFilterQueryNotes(filter: String, category: String): LiveData<List<NotesEntity>>{
+        return notesRepository.getFilterQueryNotes(filter, category)
+    }
 }

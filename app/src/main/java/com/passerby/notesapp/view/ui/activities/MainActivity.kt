@@ -2,6 +2,8 @@ package com.passerby.notesapp.view.ui.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
@@ -27,7 +29,8 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
     private lateinit var viewModel: MainViewModel
     private lateinit var materialAlertDialogBuilder: MaterialAlertDialogBuilder
     private lateinit var customAlertDialogView: View
-
+    private var searchText: String = ""
+    private var category: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,7 +102,6 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
 
     override fun onResume() {
         super.onResume()
-
         viewModel = ViewModelProvider(
             this, ViewModelProvider.AndroidViewModelFactory.getInstance(application)
         )[MainViewModel::class.java]
@@ -115,7 +117,6 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
 
         //Categories add recyclerView code
         categoriesRVAdapter = CategoriesChipRVAdapter(this, this)
-        categoriesRVAdapter.category = "All notes"
         viewModel.categoriesList.observe(this) { list ->
             list?.let { categoriesRVAdapter.updateList(it) }
         }
@@ -130,6 +131,52 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
             binding.mainNotesTv.text =
                 StringBuilder().append(it.toString()).append(" notes").toString()
         }
+
+        binding.mainSearchEt.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                searchText = StringBuilder().append("%").append(p0).append("%").toString()
+                Toast.makeText(this@MainActivity, searchText, Toast.LENGTH_SHORT).show()
+                if (searchText.isNotEmpty()) {
+                    Toast.makeText(this@MainActivity, searchText, Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@MainActivity, category, Toast.LENGTH_SHORT).show()
+                    if (category == "All notes") {
+                        Toast.makeText(this@MainActivity, "getFilterNotes", Toast.LENGTH_SHORT)
+                            .show()
+                        viewModel.getFilterNotes(searchText).observe(this@MainActivity) {
+                            it?.let { notesRVAdapter.updateList(it) }
+                        }
+                    } else {
+                        Toast.makeText(
+                            this@MainActivity, "getFilterQueryNotes",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        viewModel.getFilterQueryNotes(searchText, category)
+                            .observe(this@MainActivity) { list ->
+                                list?.let { notesRVAdapter.updateList(it) }
+                            }
+                    }
+                } else {
+                    if (category == "All notes") {
+                        Toast.makeText(this@MainActivity, "notesList", Toast.LENGTH_SHORT).show()
+                        viewModel.notesList.observe(this@MainActivity) {
+                            it?.let { notesRVAdapter.updateList(it) }
+                        }
+                    } else {
+                        Toast.makeText(this@MainActivity, "getQueryNotes", Toast.LENGTH_SHORT)
+                            .show()
+                        viewModel.getQueryNotes(category)
+                            .observe(this@MainActivity) { list ->
+                                list?.let { notesRVAdapter.updateList(it) }
+                            }
+                    }
+                }
+                binding.mainNotesRv.adapter = notesRVAdapter
+            }
+
+            override fun afterTextChanged(p0: Editable?) {}
+        })
     }
 
 
@@ -182,14 +229,31 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
 
     override fun categoryClickListener(category: String) {
         if (category == "All notes") {
-            viewModel.notesList.observe(this) {
-                it?.let { notesRVAdapter.updateList(it) }
+            if (searchText.isEmpty()) {
+                Toast.makeText(this@MainActivity, "notesList", Toast.LENGTH_SHORT).show()
+                viewModel.notesList.observe(this) {
+                    it?.let { notesRVAdapter.updateList(it) }
+                }
+            } else {
+                Toast.makeText(this@MainActivity, "getFilterNotes", Toast.LENGTH_SHORT).show()
+                viewModel.getFilterNotes(searchText).observe(this) {
+                    it?.let { notesRVAdapter.updateList(it) }
+                }
             }
         } else {
-            viewModel.getQueryNotes(category).observe(this) { list ->
-                list?.let { notesRVAdapter.updateList(it) }
+            if (searchText.isEmpty()) {
+                Toast.makeText(this@MainActivity, "getQueryNotes", Toast.LENGTH_SHORT).show()
+                viewModel.getQueryNotes(category).observe(this) { list ->
+                    list?.let { notesRVAdapter.updateList(it) }
+                }
+            } else {
+                Toast.makeText(this@MainActivity, "getFilterQueryNotes", Toast.LENGTH_SHORT).show()
+                viewModel.getFilterQueryNotes(searchText, category).observe(this) { list ->
+                    list?.let { notesRVAdapter.updateList(it) }
+                }
             }
         }
+        this.category = category
         binding.mainNotesRv.adapter = notesRVAdapter
     }
 }

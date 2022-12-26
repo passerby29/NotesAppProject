@@ -1,5 +1,6 @@
 package com.passerby.notesapp.data.room
 
+import android.provider.ContactsContract.CommonDataKinds.Note
 import androidx.lifecycle.LiveData
 import androidx.room.*
 
@@ -17,6 +18,12 @@ interface NotesDao {
 
     @Query("select * from Notes where category = :category")
     fun getQueryNotes(category: String): LiveData<List<NotesEntity>>
+
+    @Query("select * from Notes where name like :filter ")
+    fun getFilterNotes(filter: String ): LiveData<List<NotesEntity>>
+
+    @Query("select * from Notes where name like :filter and category = :category")
+    fun getFilterQueryNotes(filter: String, category: String): LiveData<List<NotesEntity>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun newNote(item: NotesEntity)
