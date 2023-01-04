@@ -3,14 +3,11 @@ package com.passerby.notesapp.view.ui.activities
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.luckyhan.studio.mokaeditor.MokaSpanTool
-import com.passerby.notesapp.data.repositories.NotesRepository
-import com.passerby.notesapp.data.room.NotesAppDB
 import com.passerby.notesapp.data.room.NotesEntity
 import com.passerby.notesapp.databinding.ActivityEditNoteBinding
 import com.passerby.notesapp.view.ui.viewmodels.EditNoteViewModel
@@ -45,7 +42,7 @@ class EditNoteActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        NotesRepository(NotesAppDB.getDatabase(application).getNotesDao()).notesList
+        //NotesRepository(NotesAppDB.getDatabase(application).getNotesDao()).notesList
 
         viewModel = ViewModelProvider(
             this, ViewModelProvider.AndroidViewModelFactory.getInstance(application)

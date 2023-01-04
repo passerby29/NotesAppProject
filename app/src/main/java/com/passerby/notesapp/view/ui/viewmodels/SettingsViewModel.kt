@@ -28,4 +28,8 @@ class SettingsViewModel(application: Application) : AndroidViewModel(application
     fun removeCategory(item: CategoriesEntity) = viewModelScope.launch(Dispatchers.IO) {
         repository.removeCategory(item)
     }
+
+    fun checkCategoryUsing(category: String): LiveData<Int> {
+        return repository.checkCategoryUsing(category)
+    }
 }

@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.passerby.notesapp.R
 import com.passerby.notesapp.data.room.NotesEntity
@@ -16,7 +15,7 @@ class NotesRVAdapter(
     private val noteClickListener: NoteClickListener,
 ) : RecyclerView.Adapter<NotesRVAdapter.NotesViewHolder>() {
 
-    val notesList = ArrayList<NotesEntity>()
+    private val notesList = ArrayList<NotesEntity>()
     var isSelected: Boolean = false
     val itemSelectedList = mutableListOf<Int>()
 

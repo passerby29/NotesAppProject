@@ -7,8 +7,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
 import com.passerby.notesapp.R
 import com.passerby.notesapp.data.room.CategoriesEntity
 
@@ -18,8 +16,7 @@ class SettingsRVAdapter(
 ) : RecyclerView.Adapter<SettingsRVAdapter.SettingsViewHolder>() {
 
     private val allCategories = ArrayList<CategoriesEntity>()
-
-    interface CategoryItemClickListener {}
+    var category: String = ""
 
     interface CategoryDeleteClickListener {
         fun onDeleteClickListener(item: CategoriesEntity)
@@ -35,6 +32,7 @@ class SettingsRVAdapter(
     override fun onBindViewHolder(holder: SettingsViewHolder, position: Int) {
         holder.categoryName.text = allCategories[position].name
         holder.categoryBtn.setOnClickListener {
+            category = allCategories[position].name
             categoryDeleteClickListener.onDeleteClickListener(
                 allCategories[position]
             )

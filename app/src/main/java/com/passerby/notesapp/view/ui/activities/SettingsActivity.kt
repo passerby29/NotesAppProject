@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -18,10 +17,11 @@ import com.passerby.notesapp.view.ui.viewmodels.SettingsViewModel
 
 class SettingsActivity : AppCompatActivity(), SettingsRVAdapter.CategoryDeleteClickListener {
 
-    lateinit var viewModel: SettingsViewModel
+    private lateinit var viewModel: SettingsViewModel
     private lateinit var binding: ActivitySettingsBinding
     private lateinit var materialAlertDialogBuilder: MaterialAlertDialogBuilder
     private lateinit var customAlertDialogView: View
+    private lateinit var categoriesRVAdapter: SettingsRVAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +41,7 @@ class SettingsActivity : AppCompatActivity(), SettingsRVAdapter.CategoryDeleteCl
             launchCustomAlertDialog()
         }
 
-        val categoriesRVAdapter = SettingsRVAdapter(this, this)
+        categoriesRVAdapter = SettingsRVAdapter(this, this)
 
         binding.settingsCategoriesRv.apply {
             layoutManager =
@@ -53,13 +53,24 @@ class SettingsActivity : AppCompatActivity(), SettingsRVAdapter.CategoryDeleteCl
             this, ViewModelProvider.AndroidViewModelFactory.getInstance(application)
         )[SettingsViewModel::class.java]
 
-        viewModel.categoriesList.observe(this, Observer { list ->
+        viewModel.categoriesList.observe(this) { list ->
             list?.let { categoriesRVAdapter.updateList(it) }
-        })
+        }
     }
 
     override fun onDeleteClickListener(item: CategoriesEntity) {
-        viewModel.removeCategory(item)
+        viewModel.checkCategoryUsing(categoriesRVAdapter.category).observe(this) {
+            if (it > 0) {
+                MaterialAlertDialogBuilder(this, R.style.DialogAlert)
+                    .setTitle("Alert")
+                    .setIcon(R.drawable.ic_alert_rectangle)
+                    .setMessage("You cannot delete a category because it is in use.")
+                    .setPositiveButton("OK") { _, _ -> }
+                    .show()
+            } else {
+                viewModel.removeCategory(item)
+            }
+        }
     }
 
     private fun launchCustomAlertDialog() {

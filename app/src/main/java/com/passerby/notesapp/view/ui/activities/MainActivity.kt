@@ -1,23 +1,19 @@
 package com.passerby.notesapp.view.ui.activities
 
-import android.content.Intent
+import android.content.*
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.view.LayoutInflater
-import android.view.View
-import android.widget.Toast
+import android.text.*
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputLayout
 import com.passerby.notesapp.R
-import com.passerby.notesapp.data.room.CategoriesEntity
-import com.passerby.notesapp.data.room.NotesEntity
+import com.passerby.notesapp.data.room.*
 import com.passerby.notesapp.databinding.ActivityMainBinding
-import com.passerby.notesapp.view.adapters.CategoriesChipRVAdapter
-import com.passerby.notesapp.view.adapters.NotesRVAdapter
+import com.passerby.notesapp.view.adapters.*
 import com.passerby.notesapp.view.ui.viewmodels.MainViewModel
 
 class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
@@ -29,20 +25,35 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
     private lateinit var viewModel: MainViewModel
     private lateinit var materialAlertDialogBuilder: MaterialAlertDialogBuilder
     private lateinit var customAlertDialogView: View
+    private lateinit var preferences: SharedPreferences
     private var searchText: String = ""
-    private var category: String = ""
+    private var category: String = "All notes"
+    private lateinit var menu: Menu
+    private var sortId = 1
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        menu = binding.bottomAppBar.menu
+        materialAlertDialogBuilder = MaterialAlertDialogBuilder(this)
+        preferences = getSharedPreferences("APP_PREFERENCES", MODE_PRIVATE)
+        val flag = preferences.contains("sortId")
+
+        if (!flag) {
+            val editor = preferences.edit()
+            editor?.putInt("sortId", 1)
+            editor?.apply()
+        } else {
+            sortId = preferences.getInt("sortId", 1)
+        }
+
         binding.floatingActionButton.setOnClickListener {
             val intent = Intent(this, EditNoteActivity::class.java)
             startActivity(intent)
         }
-
-        materialAlertDialogBuilder = MaterialAlertDialogBuilder(this)
 
         binding.mainAddCategoryBtn.setOnClickListener {
             customAlertDialogView =
@@ -61,19 +72,26 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
         binding.bottomAppBar.setOnMenuItemClickListener {
             val item = notesRVAdapter.itemSelectedList
             when (it.itemId) {
-                R.id.settings_nav_btn -> {
-                    val intent = Intent(this, SettingsActivity::class.java)
-                    startActivity(intent)
-                    true
-                }
-                R.id.bookmarks_nav_btn -> {
-                    val intent = Intent(this, BookmarksActivity::class.java)
-                    startActivity(intent)
+                R.id.sort_by_btn -> {
+                    binding.mainSortingContainer.visibility =
+                        if (binding.mainSortingContainer.visibility == View.GONE) {
+                            View.VISIBLE
+                        } else {
+                            View.GONE
+                        }
                     true
                 }
                 R.id.delete_btn -> {
                     if (item.isEmpty()) {
-                        notesRVAdapter.deleteClick(!notesRVAdapter.isSelected)
+                        menu.getItem(2)
+                            .apply {
+                                isEnabled = true
+                                icon = ContextCompat.getDrawable(
+                                    this@MainActivity,
+                                    R.drawable.ic_close
+                                )
+                            }
+                        notesRVAdapter.deleteClick(true)
                         binding.mainNotesRv.adapter = notesRVAdapter
                     } else {
                         MaterialAlertDialogBuilder(this, R.style.DialogAlert)
@@ -93,6 +111,30 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
                     }
                     true
                 }
+                R.id.placeholder -> {
+                    menu.getItem(2)
+                        .apply {
+                            isEnabled = false
+                            icon = ContextCompat.getDrawable(
+                                this@MainActivity,
+                                R.drawable.stick
+                            )
+                        }
+                    item.clear()
+                    notesRVAdapter.deleteClick(!notesRVAdapter.isSelected)
+                    binding.mainNotesRv.adapter = notesRVAdapter
+                    true
+                }
+                R.id.settings_nav_btn -> {
+                    val intent = Intent(this, SettingsActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
+                R.id.bookmarks_nav_btn -> {
+                    val intent = Intent(this, BookmarksActivity::class.java)
+                    startActivity(intent)
+                    true
+                }
                 else -> {
                     false
                 }
@@ -102,14 +144,23 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
 
     override fun onResume() {
         super.onResume()
+
+        menu.getItem(2)
+            .apply {
+                isEnabled = false
+                icon = ContextCompat.getDrawable(
+                    this@MainActivity,
+                    R.drawable.stick
+                )
+            }
         viewModel = ViewModelProvider(
             this, ViewModelProvider.AndroidViewModelFactory.getInstance(application)
         )[MainViewModel::class.java]
 
         //Notes main recyclerView code
         notesRVAdapter = NotesRVAdapter(this, this)
-        viewModel.notesList.observe(this) { list ->
-            list?.let { notesRVAdapter.updateList(it) }
+        viewModel.getAllNotes(sortId).observe(this@MainActivity) {
+            it?.let { notesRVAdapter.updateList(it) }
         }
 
         binding.mainNotesRv.adapter = notesRVAdapter
@@ -136,37 +187,26 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                searchText = StringBuilder().append("%").append(p0).append("%").toString()
-                Toast.makeText(this@MainActivity, searchText, Toast.LENGTH_SHORT).show()
+                searchText = StringBuilder().append("%").append(p0?.trim()).append("%").toString()
                 if (searchText.isNotEmpty()) {
-                    Toast.makeText(this@MainActivity, searchText, Toast.LENGTH_SHORT).show()
-                    Toast.makeText(this@MainActivity, category, Toast.LENGTH_SHORT).show()
                     if (category == "All notes") {
-                        Toast.makeText(this@MainActivity, "getFilterNotes", Toast.LENGTH_SHORT)
-                            .show()
-                        viewModel.getFilterNotes(searchText).observe(this@MainActivity) {
+                        viewModel.getFilterNotes(searchText, sortId).observe(this@MainActivity) {
                             it?.let { notesRVAdapter.updateList(it) }
                         }
                     } else {
-                        Toast.makeText(
-                            this@MainActivity, "getFilterQueryNotes",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        viewModel.getFilterQueryNotes(searchText, category)
+                        viewModel.getFilterQueryNotes(searchText, category, sortId)
                             .observe(this@MainActivity) { list ->
                                 list?.let { notesRVAdapter.updateList(it) }
                             }
                     }
                 } else {
                     if (category == "All notes") {
-                        Toast.makeText(this@MainActivity, "notesList", Toast.LENGTH_SHORT).show()
-                        viewModel.notesList.observe(this@MainActivity) {
-                            it?.let { notesRVAdapter.updateList(it) }
-                        }
+                        viewModel.getAllNotes(sortId)
+                            .observe(this@MainActivity) {
+                                it?.let { notesRVAdapter.updateList(it) }
+                            }
                     } else {
-                        Toast.makeText(this@MainActivity, "getQueryNotes", Toast.LENGTH_SHORT)
-                            .show()
-                        viewModel.getQueryNotes(category)
+                        viewModel.getQueryNotes(category, sortId)
                             .observe(this@MainActivity) { list ->
                                 list?.let { notesRVAdapter.updateList(it) }
                             }
@@ -177,8 +217,14 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
 
             override fun afterTextChanged(p0: Editable?) {}
         })
-    }
 
+        binding.apply {
+            mainSortByDateBtn1.setOnClickListener { sortList(1) }
+            mainSortByDateBtn2.setOnClickListener { sortList(2) }
+            mainSortByNameBtn1.setOnClickListener { sortList(3) }
+            mainSortByNameBtn2.setOnClickListener { sortList(4) }
+        }
+    }
 
     private fun startSearch() {
         binding.mainSearchEt.visibility = View.VISIBLE
@@ -214,6 +260,34 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
             .show()
     }
 
+    private fun sortList(sortId: Int) {
+        val editor = preferences.edit()
+        editor?.putInt("sortId", sortId)
+        editor.apply()
+        if (category == "All notes") {
+            if (searchText.isEmpty()) {
+                viewModel.getAllNotes(sortId).observe(this) {
+                    it?.let { notesRVAdapter.updateList(it) }
+                }
+            } else {
+                viewModel.getFilterNotes(searchText, sortId).observe(this) {
+                    it?.let { notesRVAdapter.updateList(it) }
+                }
+            }
+        } else {
+            if (searchText.isEmpty()) {
+                viewModel.getQueryNotes(category, sortId).observe(this) { list ->
+                    list?.let { notesRVAdapter.updateList(it) }
+                }
+            } else {
+                viewModel.getFilterQueryNotes(searchText, category, sortId).observe(this) { list ->
+                    list?.let { notesRVAdapter.updateList(it) }
+                }
+            }
+        }
+        this.sortId = preferences.getInt("sortId", 1)
+        binding.mainNotesRv.adapter = notesRVAdapter
+    }
 
     override fun onNoteClick(notes: NotesEntity) {
         val intent = Intent(this@MainActivity, EditNoteActivity::class.java)
@@ -230,25 +304,21 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
     override fun categoryClickListener(category: String) {
         if (category == "All notes") {
             if (searchText.isEmpty()) {
-                Toast.makeText(this@MainActivity, "notesList", Toast.LENGTH_SHORT).show()
-                viewModel.notesList.observe(this) {
+                viewModel.getAllNotes(sortId).observe(this) {
                     it?.let { notesRVAdapter.updateList(it) }
                 }
             } else {
-                Toast.makeText(this@MainActivity, "getFilterNotes", Toast.LENGTH_SHORT).show()
-                viewModel.getFilterNotes(searchText).observe(this) {
+                viewModel.getFilterNotes(searchText, sortId).observe(this) {
                     it?.let { notesRVAdapter.updateList(it) }
                 }
             }
         } else {
             if (searchText.isEmpty()) {
-                Toast.makeText(this@MainActivity, "getQueryNotes", Toast.LENGTH_SHORT).show()
-                viewModel.getQueryNotes(category).observe(this) { list ->
+                viewModel.getQueryNotes(category, sortId).observe(this) { list ->
                     list?.let { notesRVAdapter.updateList(it) }
                 }
             } else {
-                Toast.makeText(this@MainActivity, "getFilterQueryNotes", Toast.LENGTH_SHORT).show()
-                viewModel.getFilterQueryNotes(searchText, category).observe(this) { list ->
+                viewModel.getFilterQueryNotes(searchText, category, sortId).observe(this) { list ->
                     list?.let { notesRVAdapter.updateList(it) }
                 }
             }

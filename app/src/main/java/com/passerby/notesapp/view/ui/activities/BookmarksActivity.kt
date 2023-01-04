@@ -57,7 +57,7 @@ class BookmarksActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener 
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 viewModel.getFilterNotes(
-                    StringBuilder().append("%").append(p0).append("%").toString()
+                    StringBuilder().append("%").append(p0).append("%").toString(), 2
                 ).observe(this@BookmarksActivity) { list ->
                     list?.let { notesRVAdapter.updateList(it) }
                 }

@@ -15,7 +15,6 @@ import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
-    var notesList: LiveData<List<NotesEntity>>
     private val notesRepository: NotesRepository
     private val notesDao = NotesAppDB.getDatabase(application).getNotesDao()
     val count: LiveData<Int>
@@ -30,7 +29,6 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     init {
         notesRepository = NotesRepository(notesDao)
-        notesList = notesRepository.notesList
         count = notesRepository.count
         //
         categoriesRepository = CategoriesRepository(categoriesDao)
@@ -48,15 +46,25 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         categoriesRepository.addCategory(category)
     }
 
-    fun getQueryNotes(category: String): LiveData<List<NotesEntity>> {
-        return notesRepository.getQueryNotes(category)
+    fun getAllNotes(sortId: Int): LiveData<List<NotesEntity>> {
+        return notesRepository.getAllNotes(sortId)
     }
 
-    fun getFilterNotes(filter: String): LiveData<List<NotesEntity>> {
-        return notesRepository.getFilterNotes(filter)
+    fun getQueryNotes(category: String, sortId: Int): LiveData<List<NotesEntity>> {
+        return notesRepository.getQueryNotes(category, sortId)
     }
 
-    fun getFilterQueryNotes(filter: String, category: String): LiveData<List<NotesEntity>>{
-        return notesRepository.getFilterQueryNotes(filter, category)
+    fun getFilterNotes(filter: String, sortId: Int): LiveData<List<NotesEntity>> {
+        return notesRepository.getFilterNotes(filter, sortId)
     }
+
+    fun getFilterQueryNotes(
+        filter: String,
+        category: String,
+        sortId: Int
+    ): LiveData<List<NotesEntity>> {
+        return notesRepository.getFilterQueryNotes(filter, category, sortId)
+    }
+
+
 }

@@ -14,7 +14,6 @@ import kotlinx.coroutines.launch
 
 class EditNoteViewModel(application: Application): AndroidViewModel(application) {
 
-    private val notesList: LiveData<List<NotesEntity>>
     private val notesRepository: NotesRepository
     private val notesDao = NotesAppDB.getDatabase(application).getNotesDao()
 
@@ -25,7 +24,6 @@ class EditNoteViewModel(application: Application): AndroidViewModel(application)
 
     init {
         notesRepository = NotesRepository(notesDao)
-        notesList = notesRepository.notesList
         //
         categoriesRepository = CategoriesRepository(categoriesDao)
         categoriesList = categoriesRepository.categoriesList

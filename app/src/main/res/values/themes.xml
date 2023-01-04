@@ -118,7 +118,7 @@
         </item>
         <item name="colorPrimary">@color/text_color_main2</item>
         <item name="tint">@color/text_color_main2</item>
-        <item name="colorSurface">@color/statusBar</item>
+        <item name="colorSurface">@color/main_background</item>
         <item name="colorOnSurface">@color/text_color_main2</item>
         <item name="colorOnSurfaceVariant">@color/text_color_main2</item>
     </style>

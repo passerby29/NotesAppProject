@@ -23,4 +23,8 @@
     <string name="share_with_friends">Share with friends</string>
     <string name="note_name_hint">Note\'s name</string>
     <string name="new_category_hint">New category name</string>
+    <string name="date_of_creation">Date of creation</string>
+    <string name="date_of_update">Date of update</string>
+    <string name="name_a_z">Name (A-Z)</string>
+    <string name="name_z_a">Name (Z-A)</string>
 </resources>

@@ -6,8 +6,6 @@ import com.passerby.notesapp.data.room.NotesEntity
 
 class NotesRepository(private val notesDao: NotesDao) {
 
-    var notesList: LiveData<List<NotesEntity>> = notesDao.getAllNotes()
-
     val bookmarkedList: LiveData<List<NotesEntity>> = notesDao.getBookmarks()
 
     val count: LiveData<Int> = notesDao.getCount()
@@ -24,15 +22,23 @@ class NotesRepository(private val notesDao: NotesDao) {
         notesDao.updateNote(note)
     }
 
-    fun getQueryNotes(category: String): LiveData<List<NotesEntity>> {
-        return notesDao.getQueryNotes(category)
+    fun getAllNotes(sortId: Int): LiveData<List<NotesEntity>> {
+        return notesDao.getAllNotes(sortId)
     }
 
-    fun getFilterNotes(filter: String): LiveData<List<NotesEntity>> {
-        return notesDao.getFilterNotes(filter)
+    fun getQueryNotes(category: String, sortId: Int): LiveData<List<NotesEntity>> {
+        return notesDao.getQueryNotes(category, sortId)
     }
 
-    fun getFilterQueryNotes(filter: String, category: String): LiveData<List<NotesEntity>> {
-        return notesDao.getFilterQueryNotes(filter, category)
+    fun getFilterNotes(filter: String, sortId: Int): LiveData<List<NotesEntity>> {
+        return notesDao.getFilterNotes(filter, sortId)
+    }
+
+    fun getFilterQueryNotes(
+        filter: String,
+        category: String,
+        sortId: Int
+    ): LiveData<List<NotesEntity>> {
+        return notesDao.getFilterQueryNotes(filter, category, sortId)
     }
 }

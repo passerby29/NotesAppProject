@@ -15,4 +15,8 @@ class CategoriesRepository(private val categoriesDao: CategoriesDao) {
     suspend fun removeCategory(item: CategoriesEntity) {
         categoriesDao.removeCategory(item)
     }
+
+    fun checkCategoryUsing(category: String): LiveData<Int> {
+        return categoriesDao.checkCategoryUsing(category)
+    }
 }
