@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Simply Notes</string>
+    <string name="categories_settings_header">Настройки категорий</string>
+    <string name="add_category_button">Добавить категорию</string>
+    <string name="language_settings_header">Настройки языка</string>
+    <string name="choose_language_button">Сменить язык</string>
+    <string name="application_settings_header">Настройки приложений</string>
+    <string name="change_app_theme_button">Сменить тему прмложения</string>
+    <string name="change_main_font_button">Сменить основной шрифт</string>
+    <string name="about_us_header">О нас</string>
+    <string name="donation_button">Пожертование</string>
+    <string name="send_us_feedback_button">Отправьте ваш отзыв</string>
+    <string name="rate_us_button">Оцените нас</string>
+    <string name="share_with_friends_button">Поделитесь с друзьями</string>
+    <string name="title_sort">Сортировка</string>
+    <string name="title_delete">Удаление</string>
+    <string name="title_settings">Настройки</string>
+    <string name="title_bookmarks">Избранное</string>
+    <string name="sort_by_title">Сортировать по:</string>
+    <string name="date_old_new">ДАТА (старые-новые)</string>
+    <string name="date_new_old">ДАТА (новые-старые)</string>
+    <string name="name_a_z">Название(А-Я)</string>
+    <string name="name_z_a">Название(Я-А)</string>
+    <string name="et_search_hint">Поиск</string>
+    <string name="note_name_hint">Название</string>
+    <string name="new_category_hint">Имя категории</string>
+    <string name="category_placeholder">Без категории</string>
+    <string name="all_notes_placeholder">Все заметки</string>
+    <string name="new_category_title">Новая категория</string>
+    <string name="new_category_body">Введите название новой категории</string>
+    <string name="new_category_add_button">Добавить</string>
+    <string name="new_category_cancel_button">Отмена</string>
+    <string name="alert_category_title">Внимание</string>
+    <string name="alert_category_body">Вы не можете удалить эту категорию, потому что она используется.</string>
+    <string name="all_notes_title">" заметок"</string>
+    <string name="delete_item_title">Удаление</string>
+    <string name="delete_items_body">Вы точно хотите удалить эти заметки?</string>
+    <string name="delete_items_delete_button">Уадлить</string>
+    <string name="delete_items_cancel_button">Отмена</string>
+    <string name="select_category_title">Выбрать категорию</string>
+    <string name="select_category_cancel_button">Отмена</string>
+</resources>

@@ -37,7 +37,8 @@ class SettingsActivity : AppCompatActivity(), SettingsRVAdapter.CategoryDeleteCl
 
         binding.settingsAddCategoryBtn.setOnClickListener {
             customAlertDialogView =
-                LayoutInflater.from(this).inflate(R.layout.layout_custom_dialog, null, false)
+                LayoutInflater.from(this)
+                    .inflate(R.layout.layout_custom_dialog, binding.root, false)
             launchCustomAlertDialog()
         }
 
@@ -62,9 +63,9 @@ class SettingsActivity : AppCompatActivity(), SettingsRVAdapter.CategoryDeleteCl
         viewModel.checkCategoryUsing(categoriesRVAdapter.category).observe(this) {
             if (it > 0) {
                 MaterialAlertDialogBuilder(this, R.style.DialogAlert)
-                    .setTitle("Alert")
+                    .setTitle(getString(R.string.alert_category_title))
                     .setIcon(R.drawable.ic_alert_rectangle)
-                    .setMessage("You cannot delete a category because it is in use.")
+                    .setMessage(getString(R.string.alert_category_body))
                     .setPositiveButton("OK") { _, _ -> }
                     .show()
             } else {
@@ -79,18 +80,19 @@ class SettingsActivity : AppCompatActivity(), SettingsRVAdapter.CategoryDeleteCl
 
         // Building the Alert dialog using materialAlertDialogBuilder instance
         materialAlertDialogBuilder.setView(customAlertDialogView)
-            .setTitle("New category")
-            .setMessage("Add new category name")
-            .setPositiveButton("Add") { dialog, _ ->
+            .setTitle(getString(R.string.new_category_title))
+            .setMessage(getString(R.string.new_category_body))
+            .setPositiveButton(getString(R.string.new_category_add_button)) { dialog, _ ->
                 val address = addressTextField.editText?.text.toString()
                 if (address.isNotEmpty()) {
                     viewModel.addCategory(CategoriesEntity(address))
+                    onResume()
                     dialog.dismiss()
                 } else {
                     dialog.dismiss()
                 }
             }
-            .setNegativeButton("Cancel") { dialog, _ ->
+            .setNegativeButton(getString(R.string.new_category_cancel_button)) { dialog, _ ->
                 dialog.dismiss()
             }
             .show()

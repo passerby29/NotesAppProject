@@ -1,5 +1,6 @@
 package com.passerby.notesapp.view.adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import com.google.android.material.button.MaterialButton
 import com.passerby.notesapp.R
 import com.passerby.notesapp.data.room.CategoriesEntity
 
+@SuppressLint("NotifyDataSetChanged")
 class CategoriesChipRVAdapter(
     val context: Context,
     private val categoryClickListener: CategoryClickListener
@@ -43,9 +45,9 @@ class CategoriesChipRVAdapter(
 
     override fun getItemCount() = categoriesList.size
 
-    fun updateList(newList: List<CategoriesEntity>) {
+    fun updateList(newList: List<CategoriesEntity>, category: String) {
         categoriesList.clear()
-        categoriesList.add(0, CategoriesEntity("All notes"))
+        categoriesList.add(0, CategoriesEntity(category))
         categoriesList.addAll(newList)
         notifyDataSetChanged()
     }

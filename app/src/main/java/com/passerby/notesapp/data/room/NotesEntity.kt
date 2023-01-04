@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 class NotesEntity(
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "content") val content: String,
-    @ColumnInfo(name = "date") val date: String,
+    @ColumnInfo(name = "date") val date: Long,
     @ColumnInfo(name = "category") val category: String,
     @ColumnInfo(name = "bookmark") val bookmark: Boolean = false,
 ) {

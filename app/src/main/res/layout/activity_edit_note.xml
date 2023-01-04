@@ -22,7 +22,7 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_marginStart="16dp"
-            android:background="@drawable/item_btns_style_2"
+            android:background="@drawable/item_buttons_style_2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -35,7 +35,7 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_marginEnd="8dp"
-            android:background="@drawable/item_btns_style_4"
+            android:background="@drawable/item_buttons_style_4"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/new_note_redo_btn"
             app:layout_constraintTop_toTopOf="parent"
@@ -48,7 +48,7 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_marginEnd="8dp"
-            android:background="@drawable/item_btns_style_4"
+            android:background="@drawable/item_buttons_style_4"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/new_note_conf_btn"
             app:layout_constraintTop_toTopOf="parent"
@@ -61,7 +61,7 @@
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_marginEnd="12dp"
-            android:background="@drawable/item_btns_style_2"
+            android:background="@drawable/item_buttons_style_2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -75,6 +75,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:autofillHints="Notes name"
         android:background="@color/main_background"
         android:fontFamily="@font/montserrat_alternates_semi_bold"
         android:hint="@string/note_name_hint"
@@ -86,18 +87,18 @@
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout"
-        tools:ignore="TouchTargetSizeCheck" />
+        tools:ignore="TouchTargetSizeCheck,TextContrastCheck" />
 
     <TextView
         android:id="@+id/new_note_date_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/montserrat_alternates_regular"
-        tools:text="December 3rd"
         android:textColor="@color/text_color_add"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="@+id/new_note_name_et"
-        app:layout_constraintTop_toBottomOf="@+id/new_note_name_et" />
+        app:layout_constraintTop_toBottomOf="@+id/new_note_name_et"
+        tools:text="December 3rd" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/new_note_category_btn"
@@ -108,15 +109,14 @@
         android:background="@android:color/transparent"
         android:drawableEnd="@drawable/ic_arrow_bottom"
         android:fontFamily="@font/montserrat_alternates_regular"
-        android:text="No category"
+        android:text="@string/category_placeholder"
         android:textAlignment="textStart"
+        android:textAllCaps="false"
         android:textColor="@color/text_color_add"
         android:textSize="10sp"
-        android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="@+id/new_note_date_tv"
         app:layout_constraintStart_toEndOf="@+id/new_note_date_tv"
         app:layout_constraintTop_toBottomOf="@+id/new_note_name_et"
-        app:layout_goneMarginStart="8dp"
         tools:ignore="SmallSp,TouchTargetSizeCheck" />
 
     <com.google.android.material.button.MaterialButton
@@ -126,10 +126,11 @@
         android:layout_height="36dp"
         android:layout_gravity="center"
         android:layout_marginEnd="8dp"
-        android:padding="6dp"
+        app:iconTint="@color/text_color_main2"
         android:background="?android:attr/selectableItemBackgroundBorderless"
         android:backgroundTint="@android:color/transparent"
         android:checkable="true"
+        android:padding="6dp"
         app:icon="@drawable/bookmark_selector"
         app:layout_constraintBottom_toBottomOf="@+id/new_note_category_btn"
         app:layout_constraintEnd_toEndOf="parent"

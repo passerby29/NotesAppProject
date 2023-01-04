@@ -1,5 +1,6 @@
 package com.passerby.notesapp.view.adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.passerby.notesapp.R
 import com.passerby.notesapp.data.room.NotesEntity
+import java.text.SimpleDateFormat
 
 class NotesRVAdapter(
     val context: Context,
@@ -26,10 +28,12 @@ class NotesRVAdapter(
         return NotesViewHolder(itemView)
     }
 
+    @SuppressLint("SimpleDateFormat")
     override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
+        val sdf = SimpleDateFormat("dd MMM, yyyy - HH:mm")
         holder.notesNameTV.text = notesList[position].name
         holder.notesContentTV.text = notesList[position].content
-        holder.notesDateTV.text = notesList[position].date
+        holder.notesDateTV.text = sdf.format(notesList[position].date)
         holder.notesCategoryTV.text = notesList[position].category
         holder.notesBookmarkIV.visibility = if (notesList[position].bookmark) {
             View.VISIBLE
@@ -60,6 +64,7 @@ class NotesRVAdapter(
         return notesList.size
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun updateList(newList: List<NotesEntity>) {
         notesList.clear()
         notesList.addAll(newList)

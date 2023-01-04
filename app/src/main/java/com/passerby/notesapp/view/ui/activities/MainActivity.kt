@@ -1,9 +1,14 @@
 package com.passerby.notesapp.view.ui.activities
 
-import android.content.*
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
-import android.text.*
-import android.view.*
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
@@ -11,10 +16,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputLayout
 import com.passerby.notesapp.R
-import com.passerby.notesapp.data.room.*
+import com.passerby.notesapp.data.room.CategoriesEntity
+import com.passerby.notesapp.data.room.NotesEntity
 import com.passerby.notesapp.databinding.ActivityMainBinding
-import com.passerby.notesapp.view.adapters.*
+import com.passerby.notesapp.view.adapters.CategoriesChipRVAdapter
+import com.passerby.notesapp.view.adapters.NotesRVAdapter
 import com.passerby.notesapp.view.ui.viewmodels.MainViewModel
+import java.text.SimpleDateFormat
 
 class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
     CategoriesChipRVAdapter.CategoryClickListener {
@@ -27,7 +35,7 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
     private lateinit var customAlertDialogView: View
     private lateinit var preferences: SharedPreferences
     private var searchText: String = ""
-    private var category: String = "All notes"
+    private lateinit var category: String
     private lateinit var menu: Menu
     private var sortId = 1
 
@@ -37,6 +45,7 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        category = getString(R.string.all_notes_placeholder)
         menu = binding.bottomAppBar.menu
         materialAlertDialogBuilder = MaterialAlertDialogBuilder(this)
         preferences = getSharedPreferences("APP_PREFERENCES", MODE_PRIVATE)
@@ -57,7 +66,8 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
 
         binding.mainAddCategoryBtn.setOnClickListener {
             customAlertDialogView =
-                LayoutInflater.from(this).inflate(R.layout.layout_custom_dialog, null, false)
+                LayoutInflater.from(this)
+                    .inflate(R.layout.layout_custom_dialog, binding.root, false)
             launchCustomAlertDialog()
         }
 
@@ -88,7 +98,7 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
                                 isEnabled = true
                                 icon = ContextCompat.getDrawable(
                                     this@MainActivity,
-                                    R.drawable.ic_close
+                                    R.drawable.ic_close2
                                 )
                             }
                         notesRVAdapter.deleteClick(true)
@@ -96,16 +106,16 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
                     } else {
                         MaterialAlertDialogBuilder(this, R.style.DialogAlert)
                             .setIcon(R.drawable.ic_trash)
-                            .setTitle("Delete")
-                            .setMessage("Do you really want to delete items?")
-                            .setPositiveButton("Delete") { _, _ ->
+                            .setTitle(getString(R.string.delete_item_title))
+                            .setMessage(getString(R.string.delete_items_body))
+                            .setPositiveButton(getString(R.string.delete_items_delete_button)) { _, _ ->
                                 for (i in 0 until item.size) {
                                     viewModel.deleteNote(item[i])
                                 }
                                 item.clear()
                                 notesRVAdapter.deleteClick(!notesRVAdapter.isSelected)
                             }
-                            .setNegativeButton("Cancel") { _, _ ->
+                            .setNegativeButton(getString(R.string.delete_items_cancel_button)) { _, _ ->
                             }
                             .show()
                     }
@@ -169,7 +179,7 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
         //Categories add recyclerView code
         categoriesRVAdapter = CategoriesChipRVAdapter(this, this)
         viewModel.categoriesList.observe(this) { list ->
-            list?.let { categoriesRVAdapter.updateList(it) }
+            list?.let { categoriesRVAdapter.updateList(it, category) }
         }
         binding.mainCategoriesRv.apply {
             layoutManager =
@@ -180,7 +190,8 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
 
         viewModel.count.observe(this) {
             binding.mainNotesTv.text =
-                StringBuilder().append(it.toString()).append(" notes").toString()
+                StringBuilder().append(it.toString()).append(getString(R.string.all_notes_title))
+                    .toString()
         }
 
         binding.mainSearchEt.addTextChangedListener(object : TextWatcher {
@@ -189,7 +200,7 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 searchText = StringBuilder().append("%").append(p0?.trim()).append("%").toString()
                 if (searchText.isNotEmpty()) {
-                    if (category == "All notes") {
+                    if (category == getString(R.string.all_notes_placeholder)) {
                         viewModel.getFilterNotes(searchText, sortId).observe(this@MainActivity) {
                             it?.let { notesRVAdapter.updateList(it) }
                         }
@@ -200,7 +211,7 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
                             }
                     }
                 } else {
-                    if (category == "All notes") {
+                    if (category == getString(R.string.all_notes_placeholder)) {
                         viewModel.getAllNotes(sortId)
                             .observe(this@MainActivity) {
                                 it?.let { notesRVAdapter.updateList(it) }
@@ -226,6 +237,11 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        binding.mainSortingContainer.visibility = View.GONE
+    }
+
     private fun startSearch() {
         binding.mainSearchEt.visibility = View.VISIBLE
         binding.mainSearchBtn.setImageResource(R.drawable.ic_close)
@@ -242,9 +258,9 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
 
         // Building the Alert dialog using materialAlertDialogBuilder instance
         materialAlertDialogBuilder.setView(customAlertDialogView)
-            .setTitle("New category")
-            .setMessage("Add new category name")
-            .setPositiveButton("Add") { dialog, _ ->
+            .setTitle(getString(R.string.new_category_title))
+            .setMessage(getString(R.string.new_category_body))
+            .setPositiveButton(getString(R.string.new_category_add_button)) { dialog, _ ->
                 val address = addressTextField.editText?.text.toString()
                 if (address.isNotEmpty()) {
                     viewModel.addCategory(CategoriesEntity(address))
@@ -254,7 +270,7 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
                     dialog.dismiss()
                 }
             }
-            .setNegativeButton("Cancel") { dialog, _ ->
+            .setNegativeButton(getString(R.string.new_category_cancel_button)) { dialog, _ ->
                 dialog.dismiss()
             }
             .show()
@@ -264,7 +280,7 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
         val editor = preferences.edit()
         editor?.putInt("sortId", sortId)
         editor.apply()
-        if (category == "All notes") {
+        if (category == getString(R.string.all_notes_placeholder)) {
             if (searchText.isEmpty()) {
                 viewModel.getAllNotes(sortId).observe(this) {
                     it?.let { notesRVAdapter.updateList(it) }
@@ -289,12 +305,14 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
         binding.mainNotesRv.adapter = notesRVAdapter
     }
 
+    @SuppressLint("SimpleDateFormat")
     override fun onNoteClick(notes: NotesEntity) {
+        val sdf = SimpleDateFormat("dd MMM, yyyy - HH:mm")
         val intent = Intent(this@MainActivity, EditNoteActivity::class.java)
         intent.putExtra("noteType", "Edit")
         intent.putExtra("noteTitle", notes.name)
         intent.putExtra("noteContent", notes.content)
-        intent.putExtra("noteDate", notes.date)
+        intent.putExtra("noteDate", sdf.format(notes.date))
         intent.putExtra("noteCategory", notes.category)
         intent.putExtra("noteBookmark", notes.bookmark)
         intent.putExtra("noteId", notes.id)
@@ -302,7 +320,7 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
     }
 
     override fun categoryClickListener(category: String) {
-        if (category == "All notes") {
+        if (category == getString(R.string.all_notes_placeholder)) {
             if (searchText.isEmpty()) {
                 viewModel.getAllNotes(sortId).observe(this) {
                     it?.let { notesRVAdapter.updateList(it) }

@@ -3,11 +3,13 @@ package com.passerby.notesapp.view.ui.activities
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.luckyhan.studio.mokaeditor.MokaSpanTool
+import com.passerby.notesapp.R
 import com.passerby.notesapp.data.room.NotesEntity
 import com.passerby.notesapp.databinding.ActivityEditNoteBinding
 import com.passerby.notesapp.view.ui.viewmodels.EditNoteViewModel
@@ -50,26 +52,35 @@ class EditNoteActivity : AppCompatActivity() {
 
         viewModel.categoriesList.observe(this) { list ->
             list?.let {
-                categories = arrayOfNulls(list.size + 1)
-                for (i in 1..list.size) {
-                    categories[0] = "No category"
-                    categories[i] = it[i - 1].name
+                if (it.isNotEmpty()) {
+                    categories = arrayOfNulls(list.size + 1)
+                    for (i in 1..list.size) {
+                        categories[0] = getString(R.string.category_placeholder)
+                        categories[i] = it[i - 1].name
+                    }
+                } else {
+                    categories = arrayOfNulls(0)
                 }
             }
         }
 
         binding.newNoteCategoryBtn.setOnClickListener {
-            MaterialAlertDialogBuilder(this)
-                .setTitle("Select Category")
-                .setSingleChoiceItems(categories, index) { _, which ->
-                    index = which
-                    category = categories[which].toString()
-                }
-                .setPositiveButton("Ok") { _, _ ->
-                    binding.newNoteCategoryBtn.text = category
-                }
-                .setNegativeButton("Cancel") { _, _ -> }
-                .show()
+            if (categories.isEmpty()) {
+                Toast.makeText(this, "You don't have any category!", Toast.LENGTH_SHORT)
+                    .show()
+            } else {
+                MaterialAlertDialogBuilder(this)
+                    .setTitle(getString(R.string.select_category_title))
+                    .setSingleChoiceItems(categories, index) { _, which ->
+                        index = which
+                        category = categories[which].toString()
+                    }
+                    .setPositiveButton("OK") { _, _ ->
+                        binding.newNoteCategoryBtn.text = category
+                    }
+                    .setNegativeButton(getString(R.string.select_category_cancel_button)) { _, _ -> }
+                    .show()
+            }
         }
 
         val noteType = intent.getStringExtra("noteType")
@@ -99,7 +110,7 @@ class EditNoteActivity : AppCompatActivity() {
             }
         } else {
             val sdf = SimpleDateFormat("dd MMM, yyyy - HH:mm")
-            val currentDateAndTime: String = sdf.format(Date())
+            val currentDateAndTime: String = sdf.format(System.currentTimeMillis())
             binding.newNoteDateTv.text = currentDateAndTime
         }
 
@@ -118,10 +129,12 @@ class EditNoteActivity : AppCompatActivity() {
 
             if (noteType.equals("Edit")) {
                 if (noteTitle.isNotEmpty() && noteContent.isNotEmpty()) {
-                    val sdf = SimpleDateFormat("dd MMM, yyyy - HH:mm")
-                    val currentDateAndTime: String = sdf.format(Date())
                     val updatedNote = NotesEntity(
-                        noteTitle, noteContent, currentDateAndTime, noteCategory, noteBookmark
+                        noteTitle,
+                        noteContent,
+                        System.currentTimeMillis(),
+                        noteCategory,
+                        noteBookmark
                     )
                     updatedNote.id = noteId
                     viewModel.updateNote(updatedNote)
@@ -129,11 +142,15 @@ class EditNoteActivity : AppCompatActivity() {
             } else {
                 if (noteTitle.isNotEmpty() && noteContent.isNotEmpty()) {
                     val sdf = SimpleDateFormat("dd MMM, yyyy - HH:mm")
-                    val currentDateAndTime: String = sdf.format(Date())
+                    val currentDateAndTime: String = sdf.format(System.currentTimeMillis())
                     binding.newNoteDateTv.text = currentDateAndTime
                     viewModel.newNote(
                         NotesEntity(
-                            noteTitle, noteContent, currentDateAndTime, noteCategory, noteBookmark
+                            noteTitle,
+                            noteContent,
+                            System.currentTimeMillis(),
+                            noteCategory,
+                            noteBookmark
                         )
                     )
                 }
