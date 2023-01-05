@@ -3,13 +3,17 @@ package com.passerby.notesapp.view.ui.activities
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.res.Configuration
+import android.content.res.Resources
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,7 +27,9 @@ import com.passerby.notesapp.view.adapters.CategoriesChipRVAdapter
 import com.passerby.notesapp.view.adapters.NotesRVAdapter
 import com.passerby.notesapp.view.ui.viewmodels.MainViewModel
 import java.text.SimpleDateFormat
+import java.util.*
 
+@Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
     CategoriesChipRVAdapter.CategoryClickListener {
 
@@ -38,17 +44,42 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
     private lateinit var category: String
     private lateinit var menu: Menu
     private var sortId = 1
+    private var index = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        preferences = getSharedPreferences("APP_PREFERENCES", MODE_PRIVATE)
+
+        index = preferences.getInt("themeId", 0)
+        when (index) {
+            0 -> {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+            }
+            1 -> {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+            2 -> {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            }
+        }
+
+        val lang = preferences.getString("lang", Locale.getDefault().toString())
+
+        val myLocale = Locale(lang!!)
+        val res: Resources = resources
+        val dm: DisplayMetrics = res.displayMetrics
+        val conf: Configuration = res.configuration
+        conf.setLocale(myLocale)
+        res.updateConfiguration(conf, dm)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         category = getString(R.string.all_notes_placeholder)
         menu = binding.bottomAppBar.menu
         materialAlertDialogBuilder = MaterialAlertDialogBuilder(this)
-        preferences = getSharedPreferences("APP_PREFERENCES", MODE_PRIVATE)
+
         val flag = preferences.contains("sortId")
 
         if (!flag) {
@@ -336,9 +367,10 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
                     list?.let { notesRVAdapter.updateList(it) }
                 }
             } else {
-                viewModel.getFilterQueryNotes(searchText, category, sortId).observe(this) { list ->
-                    list?.let { notesRVAdapter.updateList(it) }
-                }
+                viewModel.getFilterQueryNotes(searchText, category, sortId)
+                    .observe(this) { list ->
+                        list?.let { notesRVAdapter.updateList(it) }
+                    }
             }
         }
         this.category = category

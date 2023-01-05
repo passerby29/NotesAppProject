@@ -37,11 +37,21 @@
     <string name="new_category_cancel_button">Cancel</string>
     <string name="alert_category_title">Alert</string>
     <string name="alert_category_body">You cannot delete a category because it is in use.</string>
-    <string name="all_notes_title"> notes</string>
+    <string name="all_notes_title">\ notes</string>
     <string name="delete_item_title">Delete</string>
     <string name="delete_items_body">Do you really want to delete items?</string>
     <string name="delete_items_delete_button">Delete</string>
     <string name="delete_items_cancel_button">Cancel</string>
     <string name="select_category_title">Select Category</string>
     <string name="select_category_cancel_button">Cancel</string>
+    <string name="select_language_title">Select language</string>
+    <string name="select_language_cancel_button">Cancel</string>
+    <string name="select_theme_title">Select theme</string>
+    <string name="select_theme_cancel_button">Cancel</string>
+    //Strings for array
+    <string name="language_item_russian">Russian</string>
+    <string name="language_item_english">English</string>
+    <string name="theme_item_system">System</string>
+    <string name="theme_item_light">Light</string>
+    <string name="theme_item_dark">Dark</string>
 </resources>

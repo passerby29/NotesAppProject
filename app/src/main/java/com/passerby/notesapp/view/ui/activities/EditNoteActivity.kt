@@ -2,7 +2,11 @@ package com.passerby.notesapp.view.ui.activities
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.content.SharedPreferences
+import android.content.res.Configuration
+import android.content.res.Resources
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -17,6 +21,7 @@ import kotlinx.android.synthetic.main.activity_edit_note.*
 import java.text.SimpleDateFormat
 import java.util.*
 
+@Suppress("DEPRECATION")
 class EditNoteActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityEditNoteBinding
@@ -26,10 +31,21 @@ class EditNoteActivity : AppCompatActivity() {
     private lateinit var category: String
     private lateinit var categories: Array<String?>
     private lateinit var spanTool: MokaSpanTool
+    private lateinit var preferences: SharedPreferences
 
     @SuppressLint("SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        preferences = getSharedPreferences("APP_PREFERENCES", MODE_PRIVATE)
+        val lang = preferences.getString("lang", Locale.getDefault().toString())
+
+        val myLocale = Locale(lang!!)
+        val res: Resources = resources
+        val dm: DisplayMetrics = res.displayMetrics
+        val conf: Configuration = res.configuration
+        conf.setLocale(myLocale)
+        res.updateConfiguration(conf, dm)
+
         binding = ActivityEditNoteBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -117,7 +133,12 @@ class EditNoteActivity : AppCompatActivity() {
         new_note_conf_btn.setOnClickListener {
             val noteTitle = binding.newNoteNameEt.text.trim().toString()
             val noteContent = binding.newNoteContentEt.text?.trim().toString()
-            val noteCategory = binding.newNoteCategoryBtn.text.trim().toString()
+            var noteCategory = binding.newNoteCategoryBtn.text.trim().toString()
+            if (noteCategory == getString(R.string.category_placeholder)) {
+                noteCategory = "null"
+            } else {
+                binding.newNoteCategoryBtn.text.trim().toString()
+            }
             val noteBookmark = when (binding.newNoteBookmarkBtn.isChecked) {
                 true -> {
                     true

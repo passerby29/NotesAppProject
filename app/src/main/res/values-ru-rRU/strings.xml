@@ -40,4 +40,15 @@
     <string name="delete_items_cancel_button">Отмена</string>
     <string name="select_category_title">Выбрать категорию</string>
     <string name="select_category_cancel_button">Отмена</string>
+    <string name="select_language_title">Выберите язык</string>
+    <string name="select_language_cancel_button">Отмена</string>
+    <string name="select_theme_title">Выберите тему</string>
+    <string name="select_theme_cancel_button">Отмена</string>
+    //Strings for array
+    <string name="language_item_russian">Русский</string>
+    <string name="language_item_english">Английский</string>
+    <string name="theme_item_system">Системная</string>
+    <string name="theme_item_light">Светлая</string>
+    <string name="theme_item_dark">Тёмная</string>
+
 </resources>

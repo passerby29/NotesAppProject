@@ -34,7 +34,11 @@ class NotesRVAdapter(
         holder.notesNameTV.text = notesList[position].name
         holder.notesContentTV.text = notesList[position].content
         holder.notesDateTV.text = sdf.format(notesList[position].date)
-        holder.notesCategoryTV.text = notesList[position].category
+        holder.notesCategoryTV.text = if (notesList[position].category == "null") {
+            context.getString(R.string.category_placeholder)
+        } else {
+            notesList[position].category
+        }
         holder.notesBookmarkIV.visibility = if (notesList[position].bookmark) {
             View.VISIBLE
         } else {

@@ -1,9 +1,13 @@
 package com.passerby.notesapp.view.ui.activities
 
 import android.content.Intent
+import android.content.SharedPreferences
+import android.content.res.Configuration
+import android.content.res.Resources
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.DisplayMetrics
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -12,15 +16,28 @@ import com.passerby.notesapp.data.room.NotesEntity
 import com.passerby.notesapp.databinding.ActivityBookmarksBinding
 import com.passerby.notesapp.view.adapters.NotesRVAdapter
 import com.passerby.notesapp.view.ui.viewmodels.MainViewModel
+import java.util.*
 
+@Suppress("DEPRECATION")
 class BookmarksActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener {
 
     private lateinit var binding: ActivityBookmarksBinding
     private lateinit var notesRVAdapter: NotesRVAdapter
     private lateinit var viewModel: MainViewModel
+    private lateinit var preferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        preferences = getSharedPreferences("APP_PREFERENCES", MODE_PRIVATE)
+        val lang = preferences.getString("lang", Locale.getDefault().toString())
+
+        val myLocale = Locale(lang!!)
+        val res: Resources = resources
+        val dm: DisplayMetrics = res.displayMetrics
+        val conf: Configuration = res.configuration
+        conf.setLocale(myLocale)
+        res.updateConfiguration(conf, dm)
         binding = ActivityBookmarksBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
