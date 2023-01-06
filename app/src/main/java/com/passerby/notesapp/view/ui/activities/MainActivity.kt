@@ -145,6 +145,14 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
                                 }
                                 item.clear()
                                 notesRVAdapter.deleteClick(!notesRVAdapter.isSelected)
+                                menu.getItem(2)
+                                    .apply {
+                                        isEnabled = false
+                                        icon = ContextCompat.getDrawable(
+                                            this@MainActivity,
+                                            R.drawable.stick
+                                        )
+                                    }
                             }
                             .setNegativeButton(getString(R.string.delete_items_cancel_button)) { _, _ ->
                             }

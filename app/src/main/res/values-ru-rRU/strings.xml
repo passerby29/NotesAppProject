@@ -3,11 +3,9 @@
     <string name="app_name">Simply Notes</string>
     <string name="categories_settings_header">Настройки категорий</string>
     <string name="add_category_button">Добавить категорию</string>
-    <string name="language_settings_header">Настройки языка</string>
     <string name="choose_language_button">Сменить язык</string>
-    <string name="application_settings_header">Настройки приложений</string>
+    <string name="application_settings_header">Настройки приложения</string>
     <string name="change_app_theme_button">Сменить тему прмложения</string>
-    <string name="change_main_font_button">Сменить основной шрифт</string>
     <string name="about_us_header">О нас</string>
     <string name="donation_button">Пожертование</string>
     <string name="send_us_feedback_button">Отправьте ваш отзыв</string>
@@ -36,7 +34,7 @@
     <string name="all_notes_title">" заметок"</string>
     <string name="delete_item_title">Удаление</string>
     <string name="delete_items_body">Вы точно хотите удалить эти заметки?</string>
-    <string name="delete_items_delete_button">Уадлить</string>
+    <string name="delete_items_delete_button">Удалить</string>
     <string name="delete_items_cancel_button">Отмена</string>
     <string name="select_category_title">Выбрать категорию</string>
     <string name="select_category_cancel_button">Отмена</string>
@@ -44,6 +42,11 @@
     <string name="select_language_cancel_button">Отмена</string>
     <string name="select_theme_title">Выберите тему</string>
     <string name="select_theme_cancel_button">Отмена</string>
+    <string name="email_hint">Введите свою почту</string>
+    <string name="email_message_hint">Напишите ваш отзыв…</string>
+    <string name="feedback_title">Отправить отзыв</string>
+    <string name="feedback_send_button">Отправить</string>
+    <string name="feedback_cancel_button">Отмена</string>
     //Strings for array
     <string name="language_item_russian">Русский</string>
     <string name="language_item_english">Английский</string>

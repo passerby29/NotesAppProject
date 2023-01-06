@@ -3,11 +3,9 @@
     //settings headers
     <string name="categories_settings_header">Categories settings</string>
     <string name="add_category_button">Add new category</string>
-    <string name="language_settings_header">Language settings</string>
     <string name="choose_language_button">Choose language</string>
     <string name="application_settings_header">Application settings</string>
     <string name="change_app_theme_button">Change app theme</string>
-    <string name="change_main_font_button">Change main font</string>
     <string name="about_us_header">About us</string>
     <string name="donation_button">Donation</string>
     <string name="send_us_feedback_button">Send us feedback</string>
@@ -48,6 +46,11 @@
     <string name="select_language_cancel_button">Cancel</string>
     <string name="select_theme_title">Select theme</string>
     <string name="select_theme_cancel_button">Cancel</string>
+    <string name="email_hint">Введите свою почту</string>
+    <string name="email_message_hint">Write your feedback…</string>
+    <string name="feedback_title">Send feedback</string>
+    <string name="feedback_send_button">Send</string>
+    <string name="feedback_cancel_button">Cancel</string>
     //Strings for array
     <string name="language_item_russian">Russian</string>
     <string name="language_item_english">English</string>

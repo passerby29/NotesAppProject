@@ -124,7 +124,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:fontFamily="@font/roboto_mono_light"
-                android:text="@string/language_settings_header"
+                android:text="@string/application_settings_header"
                 android:textColor="@color/text_color_main2"
                 android:textSize="14sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -134,7 +134,7 @@
                 android:id="@+id/settings_lang_btn"
                 style="@style/settingsButtonStyle"
                 android:layout_marginTop="8dp"
-                android:background="@drawable/item_settings_btns_style"
+                android:background="@drawable/item_settings_buttons_style"
                 android:drawableStart="@drawable/ic_globe"
                 android:text="@string/choose_language_button"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -142,54 +142,16 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView2"
                 tools:ignore="TouchTargetSizeCheck" />
 
-            <LinearLayout
-                android:id="@+id/linearLayout5"
-                style="@style/dividerStyle"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:orientation="horizontal"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/settings_lang_btn" />
-
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="8dp"
-                android:fontFamily="@font/roboto_mono_light"
-                android:text="@string/application_settings_header"
-                android:textColor="@color/text_color_main2"
-                android:textSize="14sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
-
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/settings_theme_btn"
                 style="@style/settingsButtonStyle"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/item_settings_btns_style"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/item_settings_buttons_style"
                 android:drawableStart="@drawable/ic_theme"
                 android:text="@string/change_app_theme_button"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView4"
-                tools:ignore="TouchTargetSizeCheck" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/settings_font_btn"
-                style="@style/settingsButtonStyle"
-                android:layout_marginTop="4dp"
-                android:background="@drawable/item_settings_btns_style"
-                android:drawableStart="@drawable/ic_font"
-                android:text="@string/change_main_font_button"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/settings_theme_btn"
+                app:layout_constraintTop_toBottomOf="@+id/settings_lang_btn"
                 tools:ignore="TouchTargetSizeCheck" />
 
             <LinearLayout
@@ -203,7 +165,7 @@
                 android:orientation="horizontal"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/settings_font_btn" />
+                app:layout_constraintTop_toBottomOf="@+id/settings_theme_btn" />
 
             <TextView
                 android:id="@+id/textView5"
@@ -219,35 +181,22 @@
                 app:layout_constraintTop_toBottomOf="@+id/linearLayout6" />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/settings_donate_btn"
-                style="@style/settingsButtonStyle"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/item_settings_btns_style"
-                android:drawableStart="@drawable/ic_heart"
-                android:text="@string/donation_button"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView5"
-                tools:ignore="TouchTargetSizeCheck" />
-
-
-            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/settings_fb_btn"
                 style="@style/settingsButtonStyle"
-                android:layout_marginTop="4dp"
-                android:background="@drawable/item_settings_btns_style"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/item_settings_buttons_style"
                 android:drawableStart="@drawable/ic_feedback"
                 android:text="@string/send_us_feedback_button"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/settings_donate_btn"
+                app:layout_constraintTop_toBottomOf="@+id/textView5"
                 tools:ignore="TouchTargetSizeCheck" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/settings_rate_btn"
                 style="@style/settingsButtonStyle"
                 android:layout_marginTop="4dp"
-                android:background="@drawable/item_settings_btns_style"
+                android:background="@drawable/item_settings_buttons_style"
                 android:drawableStart="@drawable/ic_star"
                 android:text="@string/rate_us_button"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -259,7 +208,7 @@
                 android:id="@+id/settings_share_btn"
                 style="@style/settingsButtonStyle"
                 android:layout_marginTop="4dp"
-                android:background="@drawable/item_settings_btns_style"
+                android:background="@drawable/item_settings_buttons_style"
                 android:drawableStart="@drawable/ic_share"
                 android:text="@string/share_with_friends_button"
                 android:layout_marginBottom="16dp"

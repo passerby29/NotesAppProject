@@ -80,25 +80,6 @@ class EditNoteActivity : AppCompatActivity() {
             }
         }
 
-        binding.newNoteCategoryBtn.setOnClickListener {
-            if (categories.isEmpty()) {
-                Toast.makeText(this, "You don't have any category!", Toast.LENGTH_SHORT)
-                    .show()
-            } else {
-                MaterialAlertDialogBuilder(this)
-                    .setTitle(getString(R.string.select_category_title))
-                    .setSingleChoiceItems(categories, index) { _, which ->
-                        index = which
-                        category = categories[which].toString()
-                    }
-                    .setPositiveButton("OK") { _, _ ->
-                        binding.newNoteCategoryBtn.text = category
-                    }
-                    .setNegativeButton(getString(R.string.select_category_cancel_button)) { _, _ -> }
-                    .show()
-            }
-        }
-
         val noteType = intent.getStringExtra("noteType")
         if (noteType.equals("Edit")) {
             val noteTitle = intent.getStringExtra("noteTitle")
@@ -110,7 +91,12 @@ class EditNoteActivity : AppCompatActivity() {
             binding.newNoteNameEt.setText(noteTitle.toString())
             binding.newNoteContentEt.setText(noteContent.toString())
             binding.newNoteDateTv.text = noteDate.toString()
-            binding.newNoteCategoryBtn.text = noteCategory.toString()
+            category = if (noteCategory == "null") {
+                getString(R.string.category_placeholder)
+            } else {
+                noteCategory.toString()
+            }
+            binding.newNoteCategoryBtn.text = category
             binding.newNoteBookmarkBtn.apply {
                 isChecked = noteBookmark
                 setOnClickListener {
@@ -128,6 +114,26 @@ class EditNoteActivity : AppCompatActivity() {
             val sdf = SimpleDateFormat("dd MMM, yyyy - HH:mm")
             val currentDateAndTime: String = sdf.format(System.currentTimeMillis())
             binding.newNoteDateTv.text = currentDateAndTime
+            category = getString(R.string.category_placeholder)
+        }
+
+        binding.newNoteCategoryBtn.setOnClickListener {
+            if (categories.isEmpty()) {
+                Toast.makeText(this, "You don't have any category!", Toast.LENGTH_SHORT)
+                    .show()
+            } else {
+                MaterialAlertDialogBuilder(this)
+                    .setTitle(getString(R.string.select_category_title))
+                    .setSingleChoiceItems(categories, index) { _, which ->
+                        index = which
+                        category = categories[which].toString()
+                    }
+                    .setPositiveButton("OK") { _, _ ->
+                        binding.newNoteCategoryBtn.text = category
+                    }
+                    .setNegativeButton(getString(R.string.select_category_cancel_button)) { _, _ -> }
+                    .show()
+            }
         }
 
         new_note_conf_btn.setOnClickListener {

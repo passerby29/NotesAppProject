@@ -10,7 +10,7 @@
     <item android:state_enabled="true">
         <shape>
             <corners android:radius="8dp"/>
-            <solid android:color="#424242" />
+            <solid android:color="@color/sort_button_color" />
         </shape>
     </item>
 </ripple>

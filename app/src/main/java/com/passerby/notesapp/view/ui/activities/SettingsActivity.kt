@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.ViewModelProvider
@@ -58,21 +59,18 @@ class SettingsActivity : AppCompatActivity(), SettingsRVAdapter.CategoryDeleteCl
         }
 
         binding.settingsAddCategoryBtn.setOnClickListener {
-            customAlertDialogView =
-                LayoutInflater.from(this)
-                    .inflate(R.layout.layout_custom_dialog, binding.root, false)
+            customAlertDialogView = LayoutInflater.from(this)
+                .inflate(R.layout.layout_custom_dialog, binding.root, false)
             launchCustomAlertDialog()
         }
 
         binding.settingsLangBtn.setOnClickListener {
             languages = arrayOf(
-                getString(R.string.language_item_english),
-                getString(R.string.language_item_russian)
+                getString(R.string.language_item_english), getString(R.string.language_item_russian)
             )
             var index = preferences.getInt("langId", 0)
 
-            MaterialAlertDialogBuilder(this)
-                .setTitle(getString(R.string.select_language_title))
+            MaterialAlertDialogBuilder(this).setTitle(getString(R.string.select_language_title))
                 .setSingleChoiceItems(languages, index) { _, which ->
                     index = which
                     language = if (index == 0) {
@@ -80,16 +78,14 @@ class SettingsActivity : AppCompatActivity(), SettingsRVAdapter.CategoryDeleteCl
                     } else {
                         "ru"
                     }
-                }
-                .setPositiveButton("OK") { _, _ ->
+                }.setPositiveButton("OK") { _, _ ->
                     val editor = preferences.edit()
                     editor.putString("lang", language)
                     editor.putInt("langId", index)
                     editor.apply()
                     val intent = Intent(this, MainActivity::class.java)
                     startActivity(intent)
-                }
-                .setNegativeButton(getString(R.string.select_language_cancel_button)) { _, _ -> }
+                }.setNegativeButton(getString(R.string.select_language_cancel_button)) { _, _ -> }
                 .show()
         }
 
@@ -100,12 +96,10 @@ class SettingsActivity : AppCompatActivity(), SettingsRVAdapter.CategoryDeleteCl
                 getString(R.string.theme_item_dark)
             )
             index = preferences.getInt("themeId", 0)
-            MaterialAlertDialogBuilder(this)
-                .setTitle(getString(R.string.select_theme_title))
+            MaterialAlertDialogBuilder(this).setTitle(getString(R.string.select_theme_title))
                 .setSingleChoiceItems(themes, index) { _, which ->
                     index = which
-                }
-                .setPositiveButton("OK") { _, _ ->
+                }.setPositiveButton("OK") { _, _ ->
                     val editor = preferences.edit()
                     when (index) {
                         0 -> {
@@ -120,9 +114,15 @@ class SettingsActivity : AppCompatActivity(), SettingsRVAdapter.CategoryDeleteCl
                     }
                     editor.putInt("themeId", index)
                     editor.apply()
-                }
-                .setNegativeButton(getString(R.string.select_theme_cancel_button)) { _, _ -> }
+                }.setNegativeButton(getString(R.string.select_theme_cancel_button)) { _, _ -> }
                 .show()
+        }
+
+        binding.settingsFbBtn.setOnClickListener {
+            customAlertDialogView =
+                LayoutInflater.from(this)
+                    .inflate(R.layout.feedback_layout_dialog, binding.root, false)
+            launchCustomAlertDialogFeedback()
         }
 
         categoriesRVAdapter = SettingsRVAdapter(this, this)
@@ -154,12 +154,13 @@ class SettingsActivity : AppCompatActivity(), SettingsRVAdapter.CategoryDeleteCl
     override fun onDeleteClickListener(item: CategoriesEntity) {
         viewModel.checkCategoryUsing(categoriesRVAdapter.category).observe(this) {
             if (it > 0) {
-                MaterialAlertDialogBuilder(this, R.style.DialogAlert)
-                    .setTitle(getString(R.string.alert_category_title))
+                MaterialAlertDialogBuilder(
+                    this,
+                    R.style.DialogAlert
+                ).setTitle(getString(R.string.alert_category_title))
                     .setIcon(R.drawable.ic_alert_rectangle)
                     .setMessage(getString(R.string.alert_category_body))
-                    .setPositiveButton("OK") { _, _ -> }
-                    .show()
+                    .setPositiveButton("OK") { _, _ -> }.show()
             } else {
                 viewModel.removeCategory(item)
             }
@@ -183,10 +184,35 @@ class SettingsActivity : AppCompatActivity(), SettingsRVAdapter.CategoryDeleteCl
                 } else {
                     dialog.dismiss()
                 }
-            }
-            .setNegativeButton(getString(R.string.new_category_cancel_button)) { dialog, _ ->
+            }.setNegativeButton(getString(R.string.new_category_cancel_button)) { dialog, _ ->
                 dialog.dismiss()
-            }
-            .show()
+            }.show()
+    }
+
+    private fun launchCustomAlertDialogFeedback() {
+        val emailEditText: EditText = customAlertDialogView.findViewById(R.id.dialog_email_et)
+        val messageEditText: EditText = customAlertDialogView.findViewById(R.id.dialog_message_et)
+
+        // Building the Alert dialog using materialAlertDialogBuilder instance
+        materialAlertDialogBuilder.setView(customAlertDialogView)
+            .setTitle(getString(R.string.feedback_title))
+            .setIcon(R.drawable.ic_feedback)
+            .setPositiveButton(getString(R.string.feedback_send_button)) { dialog, _ ->
+                val email = emailEditText.text.toString().trim()
+                val message = messageEditText.text.toString().trim()
+                if (email.isNotEmpty() && message.isNotEmpty()) {
+                    val intent = Intent(Intent.ACTION_SEND)
+                    intent.putExtra(Intent.EXTRA_EMAIL, "xxpasserby@gmail.com")
+                    intent.putExtra(Intent.EXTRA_SUBJECT, email)
+                    intent.putExtra(Intent.EXTRA_TEXT, message)
+                    intent.type = "message/rfc822"
+                    startActivity(Intent.createChooser(intent, "Choose an Email client :"))
+                    dialog.dismiss()
+                } else {
+                    dialog.dismiss()
+                }
+            }.setNegativeButton(getString(R.string.feedback_cancel_button)) { dialog, _ ->
+                dialog.dismiss()
+            }.show()
     }
 }

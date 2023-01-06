@@ -22,4 +22,5 @@
     <color name="chip_background2">#E2E2E2</color>
     <color name="chip_background">#B6A291</color>
     <color name="disabled_icon_color">#afafaf</color>
+    <color name="sort_button_color">#FEFAFD</color>
 </resources>
