@@ -110,6 +110,39 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.core.widget.NestedScrollView>
 
+        <LinearLayout
+            android:id="@+id/main_no_notes_placeholder"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="64dp"
+            android:layout_marginEnd="64dp"
+            android:gravity="center"
+            android:visibility="gone"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:layout_width="148dp"
+                android:layout_height="200dp"
+                android:alpha="0.6"
+                android:contentDescription="@string/no_notes_placeholder"
+                android:src="@drawable/ic_no_notes_placeholder" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/text_color_main2"
+                android:fontFamily="@font/montserrat_alternates_semi_bold"
+                android:text="@string/no_notes_text_placeholder"
+                android:textSize="18sp" />
+        </LinearLayout>
+
+
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -206,11 +239,11 @@
                     android:id="@+id/main_sort_by_name_btn2"
                     android:layout_width="match_parent"
                     android:layout_height="32dp"
+                    android:layout_marginBottom="4dp"
                     android:background="@drawable/item_buttons_style_6"
                     android:drawableStart="@drawable/ic_sort_by_name_down"
                     android:text="@string/name_z_a"
                     android:textColor="@color/text_color_main2"
-                    android:layout_marginBottom="4dp"
                     android:textSize="12sp" />
 
             </LinearLayout>

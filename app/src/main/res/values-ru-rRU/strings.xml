@@ -53,5 +53,7 @@
     <string name="theme_item_system">Системная</string>
     <string name="theme_item_light">Светлая</string>
     <string name="theme_item_dark">Тёмная</string>
+    <string name="no_notes_text_placeholder">Здесь пока нет заметок.\nНажмите на ＋,\nчтобы добавить заметку.</string>
+    <string name="no_notes_text_placeholder2">Здесь пока нет заметок.</string>
 
 </resources>

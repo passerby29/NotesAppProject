@@ -209,9 +209,11 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
         //Notes main recyclerView code
         notesRVAdapter = NotesRVAdapter(this, this)
         viewModel.getAllNotes(sortId).observe(this@MainActivity) {
-            it?.let { notesRVAdapter.updateList(it) }
+            it?.let {
+                notesRVAdapter.updateList(it)
+                showPlaceholder(it)
+            }
         }
-
         binding.mainNotesRv.adapter = notesRVAdapter
         //Notes main recyclerView code
 
@@ -241,24 +243,36 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
                 if (searchText.isNotEmpty()) {
                     if (category == getString(R.string.all_notes_placeholder)) {
                         viewModel.getFilterNotes(searchText, sortId).observe(this@MainActivity) {
-                            it?.let { notesRVAdapter.updateList(it) }
+                            it?.let {
+                                notesRVAdapter.updateList(it)
+                                showPlaceholder(it)
+                            }
                         }
                     } else {
                         viewModel.getFilterQueryNotes(searchText, category, sortId)
                             .observe(this@MainActivity) { list ->
-                                list?.let { notesRVAdapter.updateList(it) }
+                                list?.let {
+                                    notesRVAdapter.updateList(it)
+                                    showPlaceholder(it)
+                                }
                             }
                     }
                 } else {
                     if (category == getString(R.string.all_notes_placeholder)) {
                         viewModel.getAllNotes(sortId)
                             .observe(this@MainActivity) {
-                                it?.let { notesRVAdapter.updateList(it) }
+                                it?.let {
+                                    notesRVAdapter.updateList(it)
+                                    showPlaceholder(it)
+                                }
                             }
                     } else {
                         viewModel.getQueryNotes(category, sortId)
                             .observe(this@MainActivity) { list ->
-                                list?.let { notesRVAdapter.updateList(it) }
+                                list?.let {
+                                    notesRVAdapter.updateList(it)
+                                    showPlaceholder(it)
+                                }
                             }
                     }
                 }
@@ -362,26 +376,47 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
         if (category == getString(R.string.all_notes_placeholder)) {
             if (searchText.isEmpty()) {
                 viewModel.getAllNotes(sortId).observe(this) {
-                    it?.let { notesRVAdapter.updateList(it) }
+                    it?.let {
+                        notesRVAdapter.updateList(it)
+                        showPlaceholder(it)
+                    }
                 }
             } else {
                 viewModel.getFilterNotes(searchText, sortId).observe(this) {
-                    it?.let { notesRVAdapter.updateList(it) }
+                    it?.let {
+                        notesRVAdapter.updateList(it)
+                        showPlaceholder(it)
+                    }
                 }
             }
         } else {
             if (searchText.isEmpty()) {
                 viewModel.getQueryNotes(category, sortId).observe(this) { list ->
-                    list?.let { notesRVAdapter.updateList(it) }
+                    list?.let {
+                        notesRVAdapter.updateList(it)
+                        showPlaceholder(it)
+                    }
                 }
             } else {
                 viewModel.getFilterQueryNotes(searchText, category, sortId)
                     .observe(this) { list ->
-                        list?.let { notesRVAdapter.updateList(it) }
+                        list?.let {
+                            notesRVAdapter.updateList(it)
+                            showPlaceholder(it)
+                        }
                     }
             }
         }
         this.category = category
         binding.mainNotesRv.adapter = notesRVAdapter
+    }
+
+    private fun showPlaceholder(it: List<NotesEntity>) {
+        binding.mainNoNotesPlaceholder.visibility =
+            if (it.isEmpty()) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
     }
 }

@@ -64,7 +64,10 @@ class BookmarksActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener 
 
         notesRVAdapter = NotesRVAdapter(this, this)
         viewModel.bookmarkedList.observe(this) { list ->
-            list?.let { notesRVAdapter.updateList(it) }
+            list?.let {
+                notesRVAdapter.updateList(it)
+                showPlaceholder(it)
+            }
         }
 
         binding.bookmarksNotesRv.adapter = notesRVAdapter
@@ -76,7 +79,10 @@ class BookmarksActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener 
                 viewModel.getFilterNotes(
                     StringBuilder().append("%").append(p0).append("%").toString(), 2
                 ).observe(this@BookmarksActivity) { list ->
-                    list?.let { notesRVAdapter.updateList(it) }
+                    list?.let {
+                        notesRVAdapter.updateList(it)
+                        showPlaceholder(it)
+                    }
                 }
             }
 
@@ -104,5 +110,14 @@ class BookmarksActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener 
         intent.putExtra("noteBookmark", notes.bookmark)
         intent.putExtra("noteId", notes.id)
         startActivity(intent)
+    }
+
+    private fun showPlaceholder(it: List<NotesEntity>) {
+        binding.bookmarksNoNotesPlaceholder.visibility =
+            if (it.isEmpty()) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
     }
 }

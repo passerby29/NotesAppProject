@@ -17,7 +17,7 @@ class NotesRVAdapter(
     private val noteClickListener: NoteClickListener,
 ) : RecyclerView.Adapter<NotesRVAdapter.NotesViewHolder>() {
 
-    private val notesList = ArrayList<NotesEntity>()
+    val notesList = ArrayList<NotesEntity>()
     var isSelected: Boolean = false
     val itemSelectedList = mutableListOf<Int>()
 

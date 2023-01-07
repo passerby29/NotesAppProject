@@ -57,4 +57,7 @@
     <string name="theme_item_system">System</string>
     <string name="theme_item_light">Light</string>
     <string name="theme_item_dark">Dark</string>
+    <string name="no_notes_placeholder" translatable="false">no notes placeholder</string>
+    <string name="no_notes_text_placeholder">There are no notes here yet.\nClick on ＋ to add a note.</string>
+    <string name="no_notes_text_placeholder2">There are no notes here yet.</string>
 </resources>
