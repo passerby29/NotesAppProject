@@ -53,12 +53,12 @@
     </style>
 
     <style name="IconButtonStyle">
-        <item name="android:minWidth">@dimen/m3_btn_icon_only_min_width</item>
+        <item name="android:minWidth" tools:ignore="PrivateResource">@dimen/m3_btn_icon_only_min_width</item>
         <item name="android:padding">0dp</item>
-        <item name="android:insetLeft">@dimen/m3_btn_inset</item>
-        <item name="android:insetRight">@dimen/m3_btn_inset</item>
-        <item name="iconSize">@dimen/m3_btn_icon_only_default_size</item>
-        <item name="iconTint">@color/m3_icon_button_icon_color_selector</item>
+        <item name="android:insetLeft" tools:ignore="PrivateResource">@dimen/m3_btn_inset</item>
+        <item name="android:insetRight" tools:ignore="PrivateResource">@dimen/m3_btn_inset</item>
+        <item name="iconSize" tools:ignore="PrivateResource">@dimen/m3_btn_icon_only_default_size</item>
+        <item name="iconTint" tools:ignore="PrivateResource">@color/m3_icon_button_icon_color_selector</item>
         <item name="iconPadding">0dp</item>
         <item name="materialThemeOverlay">@style/ThemeOverlay.Material3.Button.IconButton</item>
     </style>
@@ -75,11 +75,11 @@
     </style>
 
     <style name="DisabledIconButtonStyle">
-        <item name="android:minWidth">@dimen/m3_btn_icon_only_min_width</item>
+        <item name="android:minWidth" tools:ignore="PrivateResource">@dimen/m3_btn_icon_only_min_width</item>
         <item name="android:padding">0dp</item>
-        <item name="android:insetLeft">@dimen/m3_btn_inset</item>
-        <item name="android:insetRight">@dimen/m3_btn_inset</item>
-        <item name="iconSize">@dimen/m3_btn_icon_only_default_size</item>
+        <item name="android:insetLeft" tools:ignore="PrivateResource">@dimen/m3_btn_inset</item>
+        <item name="android:insetRight" tools:ignore="PrivateResource">@dimen/m3_btn_inset</item>
+        <item name="iconSize" tools:ignore="PrivateResource">@dimen/m3_btn_icon_only_default_size</item>
         <item name="iconPadding">0dp</item>
         <item name="materialThemeOverlay">@style/ThemeOverlay.Material3.Button.IconButton</item>
     </style>
@@ -121,5 +121,11 @@
         <item name="colorSurface">@color/main_background</item>
         <item name="colorOnSurface">@color/text_color_main2</item>
         <item name="colorOnSurfaceVariant">@color/text_color_main2</item>
+    </style>
+
+    <style name="SplashTheme" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:statusBarColor">@color/statusBar</item>
+        <item name="android:windowBackground">@drawable/item_splash_screen</item>
+        <item name="background">@color/main_background</item>
     </style>
 </resources>

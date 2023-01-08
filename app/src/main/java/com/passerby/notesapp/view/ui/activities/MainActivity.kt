@@ -1,30 +1,22 @@
 package com.passerby.notesapp.view.ui.activities
 
 import android.annotation.SuppressLint
-import android.content.Intent
-import android.content.SharedPreferences
-import android.content.res.Configuration
-import android.content.res.Resources
+import android.content.*
+import android.content.res.*
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
+import android.text.*
 import android.util.DisplayMetrics
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.View
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
+import android.view.*
+import androidx.appcompat.app.*
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputLayout
 import com.passerby.notesapp.R
-import com.passerby.notesapp.data.room.CategoriesEntity
-import com.passerby.notesapp.data.room.NotesEntity
+import com.passerby.notesapp.data.room.*
 import com.passerby.notesapp.databinding.ActivityMainBinding
-import com.passerby.notesapp.view.adapters.CategoriesChipRVAdapter
-import com.passerby.notesapp.view.adapters.NotesRVAdapter
+import com.passerby.notesapp.view.adapters.*
 import com.passerby.notesapp.view.ui.viewmodels.MainViewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -44,15 +36,13 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
     private lateinit var category: String
     private lateinit var menu: Menu
     private var sortId = 1
-    private var index = 0
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        preferences = getSharedPreferences("APP_PREFERENCES", MODE_PRIVATE)
 
-        index = preferences.getInt("themeId", 0)
-        when (index) {
+        val preferences = getSharedPreferences("APP_PREFERENCES", MODE_PRIVATE)
+
+        when (preferences.getInt("themeId", 0)) {
             0 -> {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
             }
@@ -96,9 +86,8 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
         }
 
         binding.mainAddCategoryBtn.setOnClickListener {
-            customAlertDialogView =
-                LayoutInflater.from(this)
-                    .inflate(R.layout.layout_custom_dialog, binding.root, false)
+            customAlertDialogView = LayoutInflater.from(this)
+                .inflate(R.layout.layout_custom_dialog, binding.root, false)
             launchCustomAlertDialog()
         }
 
@@ -124,19 +113,19 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
                 }
                 R.id.delete_btn -> {
                     if (item.isEmpty()) {
-                        menu.getItem(2)
-                            .apply {
+                        menu.getItem(2).apply {
                                 isEnabled = true
                                 icon = ContextCompat.getDrawable(
-                                    this@MainActivity,
-                                    R.drawable.ic_close2
+                                    this@MainActivity, R.drawable.ic_close2
                                 )
                             }
                         notesRVAdapter.deleteClick(true)
                         binding.mainNotesRv.adapter = notesRVAdapter
                     } else {
-                        MaterialAlertDialogBuilder(this, R.style.DialogAlert)
-                            .setIcon(R.drawable.ic_trash)
+                        MaterialAlertDialogBuilder(
+                            this,
+                            R.style.DialogAlert
+                        ).setIcon(R.drawable.ic_trash)
                             .setTitle(getString(R.string.delete_item_title))
                             .setMessage(getString(R.string.delete_items_body))
                             .setPositiveButton(getString(R.string.delete_items_delete_button)) { _, _ ->
@@ -145,28 +134,23 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
                                 }
                                 item.clear()
                                 notesRVAdapter.deleteClick(!notesRVAdapter.isSelected)
-                                menu.getItem(2)
-                                    .apply {
+                                menu.getItem(2).apply {
                                         isEnabled = false
                                         icon = ContextCompat.getDrawable(
-                                            this@MainActivity,
-                                            R.drawable.stick
+                                            this@MainActivity, R.drawable.stick
                                         )
                                     }
                             }
                             .setNegativeButton(getString(R.string.delete_items_cancel_button)) { _, _ ->
-                            }
-                            .show()
+                            }.show()
                     }
                     true
                 }
                 R.id.placeholder -> {
-                    menu.getItem(2)
-                        .apply {
+                    menu.getItem(2).apply {
                             isEnabled = false
                             icon = ContextCompat.getDrawable(
-                                this@MainActivity,
-                                R.drawable.stick
+                                this@MainActivity, R.drawable.stick
                             )
                         }
                     item.clear()
@@ -194,12 +178,10 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
     override fun onResume() {
         super.onResume()
 
-        menu.getItem(2)
-            .apply {
+        menu.getItem(2).apply {
                 isEnabled = false
                 icon = ContextCompat.getDrawable(
-                    this@MainActivity,
-                    R.drawable.stick
+                    this@MainActivity, R.drawable.stick
                 )
             }
         viewModel = ViewModelProvider(
@@ -259,8 +241,7 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
                     }
                 } else {
                     if (category == getString(R.string.all_notes_placeholder)) {
-                        viewModel.getAllNotes(sortId)
-                            .observe(this@MainActivity) {
+                        viewModel.getAllNotes(sortId).observe(this@MainActivity) {
                                 it?.let {
                                     notesRVAdapter.updateList(it)
                                     showPlaceholder(it)
@@ -322,11 +303,9 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
                 } else {
                     dialog.dismiss()
                 }
-            }
-            .setNegativeButton(getString(R.string.new_category_cancel_button)) { dialog, _ ->
+            }.setNegativeButton(getString(R.string.new_category_cancel_button)) { dialog, _ ->
                 dialog.dismiss()
-            }
-            .show()
+            }.show()
     }
 
     private fun sortList(sortId: Int) {
@@ -398,8 +377,7 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
                     }
                 }
             } else {
-                viewModel.getFilterQueryNotes(searchText, category, sortId)
-                    .observe(this) { list ->
+                viewModel.getFilterQueryNotes(searchText, category, sortId).observe(this) { list ->
                         list?.let {
                             notesRVAdapter.updateList(it)
                             showPlaceholder(it)
@@ -412,11 +390,10 @@ class MainActivity : AppCompatActivity(), NotesRVAdapter.NoteClickListener,
     }
 
     private fun showPlaceholder(it: List<NotesEntity>) {
-        binding.mainNoNotesPlaceholder.visibility =
-            if (it.isEmpty()) {
-                View.VISIBLE
-            } else {
-                View.GONE
-            }
+        binding.mainNoNotesPlaceholder.visibility = if (it.isEmpty()) {
+            View.VISIBLE
+        } else {
+            View.GONE
+        }
     }
 }
